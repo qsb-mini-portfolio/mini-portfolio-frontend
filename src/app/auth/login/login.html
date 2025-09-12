@@ -1,0 +1,38 @@
+<div class="page">
+  <div class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 48 48" class="logo"><path d="M24 .76 47.24 24 24 47.24.76 24 24 .76ZM21 35.76V12.24L9.24 24 21 35.76Z" fill="currentColor"/></svg>
+      <h2>Mini-ALTO</h2>
+    </div>
+    <button pButton type="button" icon="pi pi-moon" class="p-button-rounded p-button-text"></button>
+  </div>
+
+  <!-- card -->
+  <p-card class="glass" [style]="{maxWidth:'520px'}">
+    <div class="header">
+      <h1>Welcome Back</h1>
+      <p>Login to manage your portfolio</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <label class="sr-only" for="username">Username</label>
+      <input pInputText id="username" type="text" formControlName="username" placeholder="Username" class="w-full mb-4">
+
+      <label class="sr-only" for="password">Password</label>
+      <p-password id="password" formControlName="password" [feedback]="false" [toggleMask]="true"
+                  placeholder="Password" inputStyleClass="w-full" styleClass="w-full mb-3"></p-password>
+
+      <div class="forgot">
+        <a href="#" class="muted">Forgot password?</a>
+      </div>
+
+      <div class="actions">
+        <button pButton type="submit" label="Login" class="btn-primary w-full" [loading]="loading()"></button>
+        <button pButton type="button" label="Create Account" class="btn-ghost w-full"></button>
+      </div>
+    </form>
+  </p-card>
+
+  <!-- radial mask background -->
+  <div class="mask"></div>
+</div>
