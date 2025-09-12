@@ -2,7 +2,12 @@
   <!-- Topbar -->
   <div class="topbar">
     <div class="brand">
-      <svg viewBox="0 0 48 48" class="logo"><path d="M24 .76 47.24 24 24 47.24.76 24 24 .76ZM21 35.76V12.24L9.24 24 21 35.76Z" fill="currentColor"/></svg>
+      <svg viewBox="0 0 48 48" class="logo">
+        <path
+          d="M24 .76 47.24 24 24 47.24.76 24 24 .76ZM21 35.76V12.24L9.24 24 21 35.76Z"
+          fill="currentColor"
+        />
+      </svg>
       <span class="brand-text">Mini-ALTO</span>
     </div>
 
@@ -23,63 +28,74 @@
     <div class="dash-grid dash-gap">
       <p-card class="kpi span-1">
         <div class="kpi-title">Net Asset Value (NAV)</div>
-        <div class="kpi-value">${{ nav | number:'1.0-2' }}</div>
+        <div class="kpi-value">${{ nav | number: '1.0-2' }}</div>
       </p-card>
 
       <p-card class="kpi span-1">
         <div class="kpi-title">Performance (%)</div>
-        <div class="kpi-value green">{{ perfPct | number:'1.2-2' }}%</div>
+        <div class="kpi-value green">{{ perfPct | number: '1.2-2' }}%</div>
       </p-card>
 
       <p-card class="kpi span-1">
         <div class="kpi-title">Daily Evolution</div>
         <div class="kpi-row">
-          <span class="kpi-value green">+{{ dailyPct | number:'1.2-2' }}%</span>
-          <span class="delta">+${{ dailyDelta | number:'1.0-2' }}</span>
+          <span class="kpi-value green">+{{ dailyPct | number: '1.2-2' }}%</span>
+          <span class="delta">+${{ dailyDelta | number: '1.0-2' }}</span>
         </div>
       </p-card>
     </div>
 
     <!-- Charts row -->
-<div class="dash-grid dash-gap">
-  <p-card class="panel span-2">
-    <div class="panel-title">NAV Over Time
-      <span class="muted right">Last 12 Months <span class="green">+12.34%</span></span>
-    </div>
-    <apx-chart class="apex-area"
-      [series]="areaSeries"
-      [chart]="areaOptions.chart"
-      [dataLabels]="areaOptions.dataLabels"
-      [stroke]="areaOptions.stroke"
-      [colors]="areaOptions.colors"
-      [fill]="areaOptions.fill"
-      [grid]="areaOptions.grid"
-      [xaxis]="areaOptions.xaxis"
-      [yaxis]="areaOptions.yaxis"
-      [tooltip]="areaOptions.tooltip"
-      [legend]="areaOptions.legend">
-    </apx-chart>
+    <div class="dash-grid dash-gap">
+      <p-card class="panel span-2">
+        <div class="panel-title">
+          NAV Over Time
+          <span class="muted right">Last 12 Months <span class="green">+12.34%</span></span>
+        </div>
+        <apx-chart
+          class="apex-area"
+          [series]="areaSeries"
+          [chart]="areaOptions.chart"
+          [dataLabels]="areaOptions.dataLabels"
+          [stroke]="areaOptions.stroke"
+          [colors]="areaOptions.colors"
+          [fill]="areaOptions.fill"
+          [grid]="areaOptions.grid"
+          [xaxis]="areaOptions.xaxis"
+          [yaxis]="areaOptions.yaxis"
+          [tooltip]="areaOptions.tooltip"
+          [legend]="areaOptions.legend"
+        >
+        </apx-chart>
       </p-card>
 
       <p-card class="panel span-1">
         <div class="panel-title">Asset Allocation</div>
-    <apx-chart class="apex-donut"
-      [series]="donutSeries"
-      [chart]="donutOptions.chart"
-      [labels]="donutOptions.labels"
-      [colors]="donutOptions.colors"
-      [dataLabels]="donutOptions.dataLabels"
-      [stroke]="donutOptions.stroke"
-      [plotOptions]="donutOptions.plotOptions"
-      [legend]="donutOptions.legend">
-    </apx-chart>
+        <apx-chart
+          class="apex-donut"
+          [series]="donutSeries"
+          [chart]="donutOptions.chart"
+          [labels]="donutOptions.labels"
+          [colors]="donutOptions.colors"
+          [dataLabels]="donutOptions.dataLabels"
+          [stroke]="donutOptions.stroke"
+          [plotOptions]="donutOptions.plotOptions"
+          [legend]="donutOptions.legend"
+        >
+        </apx-chart>
 
         <!-- Legend custom -->
         <div class="legend">
-          <div class="item"><span class="dot" style="background:#ff6aa3"></span>Equities (40%)</div>
-          <div class="item"><span class="dot" style="background:#6b74ff"></span>Fixed Income (30%)</div>
-          <div class="item"><span class="dot" style="background:#7b5cff"></span>Alternatives (20%)</div>
-          <div class="item"><span class="dot" style="background:#2a3344"></span>Cash (10%)</div>
+          <div class="item">
+            <span class="dot" style="background: #ff6aa3"></span>Equities (40%)
+          </div>
+          <div class="item">
+            <span class="dot" style="background: #6b74ff"></span>Fixed Income (30%)
+          </div>
+          <div class="item">
+            <span class="dot" style="background: #7b5cff"></span>Alternatives (20%)
+          </div>
+          <div class="item"><span class="dot" style="background: #2a3344"></span>Cash (10%)</div>
         </div>
       </p-card>
     </div>
@@ -116,21 +132,21 @@
         <div class="panel-title">Compliance Alerts</div>
         <div class="alerts">
           <div class="alert">
-            <i class="pi pi-shield" style="color:#22c55e"></i>
+            <i class="pi pi-shield" style="color: #22c55e"></i>
             <div>
               <div class="alert-title">No Compliance Alerts</div>
               <div class="muted">Your portfolio is fully compliant.</div>
             </div>
           </div>
           <div class="alert">
-            <i class="pi pi-exclamation-triangle" style="color:#f59e0b"></i>
+            <i class="pi pi-exclamation-triangle" style="color: #f59e0b"></i>
             <div>
               <div class="alert-title">Minor Breach</div>
               <div class="muted">Asset XYZ exceeds concentration limit.</div>
             </div>
           </div>
           <div class="alert">
-            <i class="pi pi-ban" style="color:#ef4444"></i>
+            <i class="pi pi-ban" style="color: #ef4444"></i>
             <div>
               <div class="alert-title">Critical Alert</div>
               <div class="muted">Unauthorized security detected.</div>

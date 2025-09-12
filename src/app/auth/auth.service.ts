@@ -23,14 +23,14 @@ export class AuthService {
       .post(`${env.apiUrl}${env.endpoints.login}`, { username, password }, { responseType: 'text' })
       .pipe(
         map((token) => normalizeToken(token)),
-        tap(token => {
-            this.store.setToken(token);
-            this.isAuthenticated.set(true);
+        tap((token) => {
+          this.store.setToken(token);
+          this.isAuthenticated.set(true);
         }),
         catchError((err) => {
           this.isAuthenticated.set(false);
           return throwError(() => err);
-        })
+        }),
       );
   }
 
@@ -46,7 +46,8 @@ export class AuthService {
 }
 
 function normalizeToken(raw: string): string {
-  return raw.trim()
-            .replace(/^Bearer\s+/i, '')
-            .replace(/^"(.*)"$/, '$1');
+  return raw
+    .trim()
+    .replace(/^Bearer\s+/i, '')
+    .replace(/^"(.*)"$/, '$1');
 }

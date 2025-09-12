@@ -10,17 +10,22 @@ import { RippleModule } from 'primeng/ripple';
 import { NgApexchartsModule } from 'ng-apexcharts';
 @Component({
   selector: 'app-dashboard',
-    standalone: true,
+  standalone: true,
 
   imports: [
     DecimalPipe,
-    CardModule, ButtonModule, TagModule, DividerModule, ProgressBarModule,
-    AvatarModule, RippleModule, NgApexchartsModule
+    CardModule,
+    ButtonModule,
+    TagModule,
+    DividerModule,
+    ProgressBarModule,
+    AvatarModule,
+    RippleModule,
+    NgApexchartsModule,
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
-
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dashboard {
   // KPIs mock
@@ -33,8 +38,8 @@ export class Dashboard {
   areaSeries = [
     {
       name: 'NAV',
-      data: [32, 28, 40, 29, 35, 26, 34, 31, 22, 18, 44, 38]
-    }
+      data: [32, 28, 40, 29, 35, 26, 34, 31, 22, 18, 44, 38],
+    },
   ];
   areaOptions: any = {
     chart: { type: 'area', height: 300, toolbar: { show: false }, zoom: { enabled: false } },
@@ -47,18 +52,32 @@ export class Dashboard {
         shadeIntensity: 1,
         opacityFrom: 0.25,
         opacityTo: 0.02,
-        stops: [0, 80, 100]
-      }
+        stops: [0, 80, 100],
+      },
     },
     grid: { borderColor: '#243246', strokeDashArray: 3, yaxis: { lines: { show: false } } },
     xaxis: {
-      categories: ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'],
+      categories: [
+        'JAN',
+        'FEB',
+        'MAR',
+        'APR',
+        'MAY',
+        'JUN',
+        'JUL',
+        'AUG',
+        'SEP',
+        'OCT',
+        'NOV',
+        'DEC',
+      ],
       labels: { style: { colors: '#7e8aa9' } },
-      axisBorder: { show: false }, axisTicks: { show: false }
+      axisBorder: { show: false },
+      axisTicks: { show: false },
     },
     yaxis: { labels: { show: false } },
     tooltip: { theme: 'dark' },
-    legend: { show: false }
+    legend: { show: false },
   };
 
   // ApexCharts — Asset Allocation (donut)
@@ -70,7 +89,7 @@ export class Dashboard {
     dataLabels: { enabled: false },
     stroke: { width: 0 },
     plotOptions: { pie: { donut: { size: '72%' } } },
-    legend: { show: false }
+    legend: { show: false },
   };
 
   sectors = [
@@ -78,13 +97,13 @@ export class Dashboard {
     { name: 'Healthcare', v: 20, color: '#ff7a7a' },
     { name: 'Financials', v: 18, color: '#ffc267' },
     { name: 'Industrials', v: 15, color: '#7bd389' },
-    { name: 'Others', v: 22, color: '#8b96b3' }
+    { name: 'Others', v: 22, color: '#8b96b3' },
   ];
 
   currencies = [
     { code: 'USD', v: 60 },
     { code: 'EUR', v: 25 },
     { code: 'GBP', v: 10 },
-    { code: 'JPY', v: 5 }
+    { code: 'JPY', v: 5 },
   ];
 }
