@@ -43,7 +43,7 @@ src/
 ## ⚙️ Installation locale
 Cloner puis installer les dépendances :
 ```powershell
-git clone <URL_DU_REPO> frontend
+git clone https://gitlab.com/qs-portfolio/Frontend.git frontend
 cd frontend
 npm install
 ```
