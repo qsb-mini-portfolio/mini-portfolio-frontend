@@ -23,13 +23,13 @@ deploy:
   stage: deploy
   image: heyvaldemar/aws-kubectl:latest
   variables:
-    DIST_DIR: "dist/frontend/browser"
+    DIST_DIR: "dist/frontend/browser/"
   script:
     # Sécurité/diagnostic
     - set -euo pipefail
     - aws --version
     - aws sts get-caller-identity
-    
+
     - echo "Using DIST_DIR=$DIST_DIR"
 
     # 1) Tous les assets fingerprintés => cache long (1 an, immutable)
