@@ -1,9 +1,9 @@
 export const API_ROUTES = {
     auth: {
-        login: '/auth/login',
-        register: '/auth/register',
+        login: '/api/auth/login',
+        register: '/api/auth/register',
     },
     dashboard: {
-        root: '/dashboard',
+        root: '/api/dashboard',
     }
 } as const;
