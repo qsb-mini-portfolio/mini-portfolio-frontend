@@ -22,7 +22,7 @@ build:
 
 deploy:
   stage: deploy
-  image: amazon/aws-cli:2
+  image: amazon/aws-cli:latest
   needs: ["build"]
   script:
     # 1) Sync des assets fingerprintés avec cache long
