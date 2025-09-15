@@ -1,69 +1,41 @@
 stages: [build, deploy]
 
-default:
-    cache:
-        paths: [node_modules/]
-
-variables:
-    ANGULAR_CONFIGURATION: "production"
-
 build:
-    stage: build
-    image: node:20
-    script:
-        - npm ci
-        - npm run build -- --configuration=${ANGULAR_CONFIGURATION}
-    artifacts:
-        paths:
-            - dist/
-        expire_in: 1 week
-    rules:
-        - if: '$CI_COMMIT_BRANCH == "main"'
+  stage: build
+  image: node:20
+  script:
+    - npm ci
+    - npm run build -- --configuration=production
+  artifacts:
+    paths: [dist/]
+    expire_in: 1 week
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 deploy:
   stage: deploy
   image: public.ecr.aws/aws-cli/aws-cli:latest
   needs: ["build"]
-  variables:
-    # Facultatif: force la région si non définie en Variables CI
-    AWS_DEFAULT_REGION: "eu-west-3"
   script:
-    # 0) Echo commandes + version CLI
     - set -euxo pipefail
     - aws --version
-
-    # 1) Vérifier les creds et la région
     - aws sts get-caller-identity
-    - echo "Region: ${AWS_DEFAULT_REGION}"
-
-    # 2) Trouver le dossier de build Angular (prend le premier répertoire sous dist/)
-    - DIST_DIR="$(ls -d dist/*/ | head -n 1)"
+    # Trouve le dossier de build (Angular 16+)
+    - DIST_DIR="$(ls -d dist/*/browser/ dist/*/ 2>/dev/null | head -n 1)"
     - echo "DIST_DIR=${DIST_DIR}"
-
-    # 3) Sync de tous les assets (sauf index.html et assets/config.json) avec cache long
-    - aws s3 sync "${DIST_DIR}" "s3://${S3_BUCKET}/" \
-        --delete \
-        --exclude "index.html" \
-        --exclude "assets/config.json" \
+    # 1) Assets fingerprintés => cache long
+    - aws s3 cp "${DIST_DIR}" "s3://${S3_BUCKET}/" --recursive \
+        --exclude "index.html" --exclude "assets/config.json" \
         --cache-control "public,max-age=31536000,immutable"
-
-    # 4) Copier index.html avec no-cache (chemin exact)
+    # 2) index.html => no-cache
     - aws s3 cp "${DIST_DIR}index.html" "s3://${S3_BUCKET}/index.html" \
-        --cache-control "no-cache,no-store,must-revalidate" \
-        --content-type "text/html"
-
-    # 5) Copier assets/config.json avec no-cache s'il existe
+        --cache-control "no-cache,no-store,must-revalidate" --content-type "text/html"
+    # 3) config.json => no-cache (si présent)
     - if [ -f "${DIST_DIR}assets/config.json" ]; then
         aws s3 cp "${DIST_DIR}assets/config.json" "s3://${S3_BUCKET}/assets/config.json" \
-          --cache-control "no-cache" \
-          --content-type "application/json";
-      else
-        echo "WARNING: ${DIST_DIR}assets/config.json not found";
+          --cache-control "no-cache" --content-type "application/json";
       fi
-
-    # 6) Invalidation CloudFront ciblée
+    # 4) Invalidation CloudFront ciblée
     - aws cloudfront create-invalidation --distribution-id "${CF_DIST_ID}" --paths "/index.html" "/assets/config.json"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
-  environment:
-    name: production
