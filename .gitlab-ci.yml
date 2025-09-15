@@ -24,9 +24,6 @@ deploy:
   stage: deploy
   image: heyvaldemar/aws-kubectl:latest
   needs: ["build"]
-  variables:
-    # Si non défini dans les variables du projet, on force la région ici.
-    AWS_DEFAULT_REGION: "eu-west-3"
   script:
     # Sécurité/diagnostic
     - set -euo pipefail
