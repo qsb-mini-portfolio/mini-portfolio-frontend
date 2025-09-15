@@ -43,10 +43,8 @@ deploy:
     - echo "DIST_DIR=${DIST_DIR}"
 
     # 1) Tous les assets fingerprintés => cache long (1 an, immutable)
-    - aws s3 cp "${DIST_DIR}" "s3://${S3_BUCKET}/" --recursive \
-        --exclude "index.html" \
-        --exclude "assets/config.json" \
-        --cache-control "public,max-age=31536000,immutable"
+    - aws s3 cp "${DIST_DIR}" "s3://${S3_BUCKET}/" --recursive --exclude "index.html" --exclude "assets/config.json" --cache-control "public,max-age=31536000,immutable"
+
 
     # 2) index.html => no-cache (toujours rafraîchi)
     - aws s3 cp "${DIST_DIR}index.html" "s3://${S3_BUCKET}/index.html" \
