@@ -14,28 +14,37 @@ build:
 
 deploy:
   stage: deploy
-  image: public.ecr.aws/aws-cli/aws-cli:latest
+  image: public.ecr.aws/aws-cli/aws-cli:2.17.40
   needs: ["build"]
+  variables:
+    AWS_DEFAULT_REGION: "eu-west-3"
   script:
-    - set -euxo pipefail
+    - set -euo pipefail
     - aws --version
     - aws sts get-caller-identity
-    # Trouve le dossier de build (Angular 16+)
+    # Angular 16+: build can be dist/<app>/ or dist/<app>/browser/
     - DIST_DIR="$(ls -d dist/*/browser/ dist/*/ 2>/dev/null | head -n 1)"
     - echo "DIST_DIR=${DIST_DIR}"
-    # 1) Assets fingerprintés => cache long
+    # 1) All hashed assets => long cache
     - aws s3 cp "${DIST_DIR}" "s3://${S3_BUCKET}/" --recursive \
         --exclude "index.html" --exclude "assets/config.json" \
         --cache-control "public,max-age=31536000,immutable"
-    # 2) index.html => no-cache
+    # 2) index.html => no cache
     - aws s3 cp "${DIST_DIR}index.html" "s3://${S3_BUCKET}/index.html" \
-        --cache-control "no-cache,no-store,must-revalidate" --content-type "text/html"
-    # 3) config.json => no-cache (si présent)
-    - if [ -f "${DIST_DIR}assets/config.json" ]; then
+        --cache-control "no-cache,no-store,must-revalidate" \
+        --content-type "text/html"
+    # 3) assets/config.json => no cache (if present)
+    - |
+      if [ -f "${DIST_DIR}assets/config.json" ]; then
         aws s3 cp "${DIST_DIR}assets/config.json" "s3://${S3_BUCKET}/assets/config.json" \
           --cache-control "no-cache" --content-type "application/json";
+      else
+        echo "WARNING: ${DIST_DIR}assets/config.json not found";
       fi
-    # 4) Invalidation CloudFront ciblée
+    # 4) Targeted invalidation
     - aws cloudfront create-invalidation --distribution-id "${CF_DIST_ID}" --paths "/index.html" "/assets/config.json"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+  environment:
+    name: production
+
