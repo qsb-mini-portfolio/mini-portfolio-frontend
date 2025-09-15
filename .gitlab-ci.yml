@@ -1,19 +1,5 @@
 stages: [build, deploy]
 
-build:
-  stage: build
-  image: node:22
-  script:
-    - npm ci
-    - npm run build -- --configuration=production
-  artifacts:
-    paths: [dist/]
-    expire_in: 1 week
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-
-stages: [build, deploy]
-
 # --- BUILD ANGULAR ---
 build:
   stage: build
@@ -38,11 +24,22 @@ deploy:
   stage: deploy
   image: heyvaldemar/aws-kubectl:latest
   needs: ["build"]
+  variables:
+    # Si non défini dans les variables du projet, on force la région ici.
+    AWS_DEFAULT_REGION: "eu-west-3"
   script:
     # Sécurité/diagnostic
     - set -euo pipefail
     - aws --version
     - aws sts get-caller-identity
+
+    # (Optionnel) Proxy d'entreprise : si le CA interne est fourni en base64, on le charge
+    - |
+      if [ -n "${CORP_CA_PEM_B64:-}" ]; then
+        echo "$CORP_CA_PEM_B64" | base64 -d > corp-proxy.pem
+        export AWS_CA_BUNDLE="$PWD/corp-proxy.pem"
+        echo "Custom CA loaded into AWS_CA_BUNDLE"
+      fi
 
     # Trouver le répertoire de build Angular (Angular 16+ peut sortir /browser/)
     - DIST_DIR="$(ls -d dist/*/browser/ dist/*/ 2>/dev/null | head -n 1)"
