@@ -55,5 +55,8 @@ export class Login {
     });
   }
 
-  goRegister() {}
+  goRegister() {
+    if (this.loading()) return;
+    this.router.navigateByUrl('/register');
+  }
 }
