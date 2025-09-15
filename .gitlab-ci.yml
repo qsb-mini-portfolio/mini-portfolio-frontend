@@ -15,28 +15,20 @@ build:
     paths:
       - dist/
     expire_in: 1 week
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+  only:
+    - main
 
 # --- DEPLOY TO S3 + INVALIDATE CLOUDFRONT ---
 deploy:
   stage: deploy
   image: heyvaldemar/aws-kubectl:latest
-  needs: ["build"]
+  variables:
+    DIST_DIR: $(ls -d dist/*/browser/ 2>/dev/null | head -n1)
   script:
     # Sécurité/diagnostic
     - set -euo pipefail
     - aws --version
     - aws sts get-caller-identity
-
-    # Trouver le répertoire de build Angular (Angular 16+ peut sortir /browser/)
-    - |
-      if DIST_DIR_BROWSER=$(ls -d dist/*/browser/ 2>/dev/null | head -n1); then
-        DIST_DIR="$DIST_DIR_BROWSER"
-      else
-        DIST_DIR=$(ls -d dist/*/ 2>/dev/null | head -n1)
-      fi
-      echo "DIST_DIR=${DIST_DIR}"
 
     # 1) Tous les assets fingerprintés => cache long (1 an, immutable)
     - aws s3 cp "${DIST_DIR}" "s3://${S3_BUCKET}/" --recursive --exclude "index.html" --exclude "assets/config.json" --cache-control "public,max-age=31536000,immutable"
@@ -55,7 +47,9 @@ deploy:
 
     # 4) Invalidation ciblée CloudFront (inutile d'invalider les assets hashés)
     - aws cloudfront create-invalidation --distribution-id "${CF_DIST_ID}" --paths "/index.html" "/assets/config.json"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+  only:
+    - main
   environment:
     name: production
+  dependencies:
+    - build
