@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TokenStorage } from './token-storage.service';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { env } from '../../environments/env';
+import { API_ROUTES } from '../shared/api/api-routes';
 
 interface RegisterDto {
   username: string;
@@ -20,7 +21,7 @@ export class AuthService {
 
   login(username: string, password: string) {
     return this.http
-      .post(`${env.apiUrl}${env.endpoints.login}`, { username, password }, { responseType: 'text' })
+      .post(`${env.apiUrl}${API_ROUTES.auth.login}`, { username, password }, { responseType: 'text' })
       .pipe(
         map((token) => normalizeToken(token)),
         tap((token) => {
@@ -35,7 +36,7 @@ export class AuthService {
   }
 
   register(dto: RegisterDto) {
-    return this.http.post(`${env.apiUrl}${env.endpoints.register}`, dto);
+    return this.http.post(`${env.apiUrl}${API_ROUTES.auth.register}`, dto);
   }
 
   logout() {
