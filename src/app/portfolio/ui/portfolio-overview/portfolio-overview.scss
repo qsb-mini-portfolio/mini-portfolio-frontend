@@ -1,0 +1,13 @@
+/* Page harmonisée */
+.page { min-height: calc(100vh - 64px); background: var(--bg); padding: 1.25rem 2rem 2rem; color: var(--txt); }
+.content { max-width: 1200px; margin: 0 auto; }
+
+/* Entête + cartes + formulaire existants */
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; }
+.card { margin-top: 1.25rem; }
+form.form {
+  display: grid; gap: 1rem;
+  .row { display: grid; grid-template-columns: 140px 1fr; gap: .75rem; align-items: center; }
+  .amount { text-align: right; }
+  .actions { display: flex; justify-content: flex-end; gap: .5rem; }
+}

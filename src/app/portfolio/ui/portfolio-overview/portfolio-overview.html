@@ -1,0 +1,102 @@
+<div class="page">
+  <div class="content">
+    <div class="container">
+      <div class="header">
+        <div>
+          <h1 class="title">Portfolio Overview</h1>
+          <p class="muted">View your current positions and recent transactions.</p>
+        </div>
+        <button pButton pButtonIcon="pi pi-plus" pButtonLabel="Add Transaction" class="btn-primary" (click)="openDialog()"></button>
+      </div>
+
+      <!-- Positions -->
+      <p-card class="card">
+        <ng-template pTemplate="header"><h2>Positions</h2></ng-template>
+        <p-table [value]="positionsMutable()" [tableStyle]="{'min-width':'800px'}">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Symbol</th><th>Name</th>
+              <th class="text-right">Quantity</th>
+              <th class="text-right">Current Price</th>
+              <th class="text-right">Market Value</th>
+              <th class="text-right">% of Portfolio</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-p>
+            <tr>
+              <td><b>{{ p.symbol }}</b></td>
+              <td>{{ p.name }}</td>
+              <td class="text-right">{{ p.quantity }}</td>
+              <td class="text-right">{{ p.currentPrice | currency:'USD' }}</td>
+              <td class="text-right">{{ p.marketValue  | currency:'USD' }}</td>
+              <td class="text-right">{{ p.weightPct | number:'1.0-0' }}%</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+
+      <!-- Transactions -->
+      <p-card class="card">
+        <ng-template pTemplate="header"><h2>Transactions</h2></ng-template>
+        <p-table [value]="transactionsMutable()" [tableStyle]="{'min-width':'800px'}">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Date</th><th>Instrument</th><th>BUY/SELL</th>
+              <th class="text-right">Quantity</th>
+              <th class="text-right">Price</th>
+              <th class="text-right">Amount</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-t>
+            <tr>
+              <td>{{ t.date }}</td>
+              <td><b>{{ t.symbol }}</b></td>
+              <td><p-tag [severity]="tagSeverity(t.side)" [value]="t.side"></p-tag></td>
+              <td class="text-right">{{ t.quantity }}</td>
+              <td class="text-right">{{ t.price | currency:'USD' }}</td>
+              <td class="text-right">{{ (t.quantity * t.price) | currency:'USD' }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+
+      <!-- Dialog -->
+      <p-dialog
+        [visible]="showDialog()"
+        (visibleChange)="showDialog.set($event)"
+        header="Add Transaction"
+        [modal]="true"
+        [style]="{width:'520px'}">
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+          <div class="row">
+            <label>Date</label>
+            <p-datePicker formControlName="date" dateFormat="yy-mm-dd"></p-datePicker>
+          </div>
+          <div class="row">
+            <label>Instrument</label>
+            <p-select formControlName="symbol" [options]="instruments"></p-select>
+          </div>
+          <div class="row">
+            <label>Side</label>
+            <p-select formControlName="side" [options]="[{label:'BUY',value:'BUY'},{label:'SELL',value:'SELL'}]"></p-select>
+          </div>
+          <div class="row">
+            <label>Quantity</label>
+            <p-inputNumber formControlName="quantity" [min]="1"></p-inputNumber>
+          </div>
+          <div class="row">
+            <label>Price</label>
+            <p-inputNumber formControlName="price" mode="currency" currency="USD" [min]="0.01"></p-inputNumber>
+          </div>
+
+          <div class="amount">Amount: <b>{{ amount() | currency:'USD' }}</b></div>
+
+          <div class="actions">
+            <button pButton type="button" pButtonLabel="Cancel" class="p-button-text btn-ghost" (click)="closeDialog()"></button>
+            <button pButton type="submit" pButtonLabel="Save" pButtonIcon="pi pi-check" class="btn-primary" [disabled]="form.invalid"></button>
+          </div>
+        </form>
+      </p-dialog>
+    </div>
+  </div>
+</div>

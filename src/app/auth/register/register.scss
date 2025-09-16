@@ -23,37 +23,13 @@
 
 /* ===== Page & centrage ===== */
 .page {
-  min-height: 100vh;
+  min-height: calc(100vh - 64px);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  background: var(--bg);
-  padding: 6rem 1rem 3rem; /* place pour la topbar */
-  color: var(--txt-strong);
-}
-
-/* ===== Topbar ===== */
-.topbar {
-  position: absolute;
-  inset: 0 0 auto 0;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  color: #fff;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 700;
-}
-.logo {
-  width: 24px;
-  height: 24px;
+  padding: 4rem 1rem 3rem; /* espace sous header */
 }
 
 /* ===== Carte (glass navy) ===== */
@@ -68,7 +44,7 @@
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(8px);
   padding: 2rem 1.75rem 2rem;
-  color: var(--txt-strong);
+  color: var(--txt);
 }
 
 /* Titre / sous-titre */
@@ -77,10 +53,9 @@
   font-weight: 800;
   letter-spacing: -0.015em;
   margin: 0 0 0.35rem;
-  color: var(--txt-strong);
 }
 .header p {
-  color: var(--txt-soft);
+  color: var(--muted);
   margin: 0 0 1.25rem;
 }
 
@@ -130,36 +105,8 @@
   gap: 0.75rem;
   padding-top: 0.25rem;
 }
-:host ::ng-deep .btn-primary.p-button {
-  height: 3rem;
-  border-radius: 12px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  background: #ffffff;
-  color: #0b0b0c;
-  border: none;
-}
-:host ::ng-deep .btn-primary.p-button:hover {
-  background: #e9e9e9;
-}
 
-/* Secondaire "ghost" avec accent violet */
-:host ::ng-deep .btn-ghost.p-button {
-  height: 3rem;
-  border-radius: 12px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  background: transparent;
-  color: var(--txt-strong);
-  border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
-}
-:host ::ng-deep .btn-ghost.p-button:hover {
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-  border-color: var(--accent-600);
-}
-
-/* ===== Halo de fond bleu/violet (derrière) ===== */
+/* Halo de fond bleu/violet (derrière) */
 .mask {
   position: absolute;
   inset: 0;

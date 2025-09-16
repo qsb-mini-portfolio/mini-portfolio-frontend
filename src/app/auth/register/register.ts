@@ -11,9 +11,11 @@ import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-register',
+  standalone: true,
   imports: [ReactiveFormsModule, CardModule, InputTextModule, PasswordModule, ButtonModule, MessageModule, RippleModule],
   templateUrl: './register.html',
-  styleUrl: './register.scss',
+  styleUrls: ['./register.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Register {
   private fb = inject(FormBuilder);

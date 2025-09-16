@@ -1,0 +1,20 @@
+<div class="topbar">
+  <div class="brand" (click)="go('/')" role="button" tabindex="0">
+    <svg viewBox="0 0 48 48" class="logo" aria-hidden="true">
+      <path d="M24 .76 47.24 24 24 47.24.76 24 24 .76ZM21 35.76V12.24L9.24 24 21 35.76Z" fill="currentColor" />
+    </svg>
+    <span class="brand-text">Mini-ALTO</span>
+  </div>
+
+  <div class="top-actions">
+    @if (isAuth()) {
+      <button pButton class="p-button-text" [routerLink]="'/dashboard'" label="Dashboard"></button>
+      <button pButton class="p-button-text" [routerLink]="'/portfolio'" label="Portfolio"></button>
+      <button pButton class="p-button-rounded p-button-text" icon="pi pi-sign-out" (click)="logout()" aria-label="Logout"></button>
+    } @else {
+      <button pButton class="btn-ghost" [routerLink]="'/login'" label="Login"></button>
+      <button pButton class="btn-primary" [routerLink]="'/register'" label="Register"></button>
+    }
+  </div>
+</div>
+

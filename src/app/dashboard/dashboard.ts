@@ -24,7 +24,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     NgApexchartsModule,
   ],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss',
+  styleUrls: ['./dashboard.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dashboard {

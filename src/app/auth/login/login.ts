@@ -22,7 +22,7 @@ import { AuthService } from '../auth.service';
     RippleModule,
   ],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
+  styleUrls: ['./login.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Login {

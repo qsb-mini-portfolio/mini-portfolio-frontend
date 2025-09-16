@@ -1,8 +1,74 @@
 :root {
   --p-font-family:
     'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+
+  /* Thème global harmonisé (reprend le dashboard) */
+  --bg: #0b1324;
+  --card: #111a2e;
+  --card-weak: #0e1626;
+  --border: #243246;
+  --txt: #e6efff;
+  --muted: #9aa8c7;
+  --accent: #6c5ce7;
+  --accent-600: #5345d9;
+  --success: #22c55e;
+
+  /* alias compat pour pages login/register */
+  --txt-strong: var(--txt);
+  --txt-soft: var(--muted);
 }
 html,
 body {
   font-family: var(--p-font-family);
 }
+
+/* Base page layout */
+body { background: var(--bg); color: var(--txt); }
+.page { min-height: calc(100vh - 64px); background: var(--bg); padding: 1.25rem 2rem 2rem; color: var(--txt); }
+.content { max-width: 1200px; margin: 1.25rem auto 0; }
+.title { font-size: 32px; font-weight: 800; margin: 1.25rem 0.25rem; letter-spacing: -0.015em; }
+.muted { color: var(--muted); }
+
+/* Cards */
+.p-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--txt); }
+.p-card .p-card-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 0.75rem 1rem; }
+.p-card .p-card-header h2, .p-card .p-card-title { margin: 0; font-size: 18px; font-weight: 700; color: var(--txt); }
+.p-card .p-card-body { width: 100%; padding: 0.75rem 1rem 1rem; }
+
+/* Form controls */
+.p-inputtext,
+.p-password-input,
+.p-inputnumber-input,
+.p-select,
+.p-datepicker input {
+  height: 3rem;
+  border-radius: 12px;
+  background: var(--card-weak);
+  border: 1px solid var(--border);
+  color: var(--txt);
+}
+.p-inputtext::placeholder,
+.p-password-input::placeholder { color: color-mix(in srgb, var(--muted) 85%, transparent); }
+.p-inputtext:focus,
+.p-password-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 32%, transparent); outline: none; }
+
+/* Buttons (optionnel: variantes utilitaires) */
+.p-button.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.p-button.btn-primary:hover { background: var(--accent-600); border-color: var(--accent-600); }
+.p-button.btn-ghost { background: transparent; border-color: var(--border); color: var(--txt); }
+.p-button.btn-ghost:hover { background: rgba(255,255,255,0.04); }
+
+/* Data table (PrimeNG) */
+.p-datatable { color: var(--txt); }
+.p-datatable .p-datatable-header { background: var(--card); border: 1px solid var(--border); }
+.p-datatable thead > tr > th { background: var(--card); border-color: var(--border); color: var(--muted); font-weight: 600; }
+.p-datatable tbody > tr > td { background: var(--card); border-color: var(--border); }
+.p-datatable .p-datatable-tbody > tr:hover > td { background: #0f1a2d; }
+
+/* Dialog */
+.p-dialog .p-dialog-header, .p-dialog .p-dialog-content, .p-dialog .p-dialog-footer { background: var(--card); color: var(--txt); border-color: var(--border); }
+
+/* Progress bar */
+.p-progressbar { height: 8px; background: #0d1730; border-radius: 999px; border: 1px solid var(--border); }
+.p-progressbar .p-progressbar-value { background: linear-gradient(90deg, #36d399, #2dd4bf); }
+

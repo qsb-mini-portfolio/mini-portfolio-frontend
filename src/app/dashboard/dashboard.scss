@@ -11,83 +11,23 @@
   --success: #22c55e;
 }
 
-/* Page & topbar */
+/* Page */
 .page {
-  min-height: 100vh;
+  min-height: calc(100vh - 64px);
   background: var(--bg);
   padding: 1.25rem 2rem 2rem;
   color: var(--txt);
 }
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #0d1730;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 0.75rem 1rem;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #b6c7ff;
-  font-weight: 700;
-}
-.logo {
-  width: 18px;
-  height: 18px;
-}
-.brand-text {
-  font-weight: 700;
-}
-.top-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.user {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.name {
-  color: #c7d5ff;
-  font-weight: 600;
-}
-:host ::ng-deep .btn-cta.p-button {
-  background: var(--accent);
-  border: 1px solid var(--accent-600);
-  color: #fff;
-  border-radius: 10px;
-  padding: 0.6rem 0.9rem;
-  font-weight: 700;
-}
-:host ::ng-deep .btn-cta.p-button:hover {
-  background: var(--accent-600);
-}
 
 /* ========= NEW: grid layout classes (no clash with PrimeFlex) ========= */
-.dash-grid {
-  display: grid;
-}
-.dash-gap {
-  gap: 1rem;
-}
-.span-1 {
-  grid-column: span 1;
-}
-.span-2 {
-  grid-column: span 2;
-}
+.dash-grid { display: grid; }
+.dash-gap { gap: 1rem; }
+.span-1 { grid-column: span 1; }
+.span-2 { grid-column: span 2; }
 
 @media (min-width: 960px) {
-  .dash-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .span-2 {
-    grid-column: span 2;
-  }
+  .dash-grid { grid-template-columns: repeat(3, 1fr); }
+  .span-2 { grid-column: span 2; }
 }
 
 /* Cards / panels */
@@ -97,134 +37,43 @@
   border-radius: 12px;
   color: var(--txt);
 }
-.kpi {
-  padding: 1rem 1.25rem;
-}
-.kpi-title {
-  color: var(--muted);
-  font-weight: 600;
-  margin-bottom: 0.35rem;
-}
-.kpi-value {
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-.kpi-row {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-}
-.green {
-  color: var(--success);
-}
-.delta {
-  color: #62e1a0;
-  font-weight: 600;
-}
+.kpi { padding: 1rem 1.25rem; }
+.kpi-title { color: var(--muted); font-weight: 600; margin-bottom: 0.35rem; }
+.kpi-value { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+.kpi-row { display: flex; align-items: baseline; gap: 0.5rem; }
+.green { color: var(--success); }
+.delta { color: #62e1a0; font-weight: 600; }
 
-.panel {
-  padding: 1rem 1rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-}
+.panel { padding: 1rem 1rem 1.25rem; display: flex; flex-direction: column; }
 .panel-title {
   color: var(--txt);
   font-weight: 700;
   margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
 }
-.muted {
-  color: var(--muted);
-}
-.right {
-  float: none;
-}
+.muted { color: var(--muted); }
+.right { float: none; }
 
 /* ========= Charts sizing (robust) ========= */
-.panel apx-chart {
-  width: 100%;
-  height: 300px;
-}
-
-/* IMPORTANT: remove these old overrides if you have them */
-/*
-:host ::ng-deep .apexcharts-canvas, .apexcharts-svg { width:100% !important; height:100% !important; }
-.panel .panel-title + apx-chart{ clear: both; }
-*/
+.panel apx-chart { width: 100%; height: 300px; }
 
 /* p-card body padding */
-:host ::ng-deep .p-card .p-card-body {
-  width: 100%;
-  padding: 0.5rem 0.5rem 0.75rem;
-}
+:host ::ng-deep .p-card .p-card-body { width: 100%; padding: 0.5rem 0.5rem 0.75rem; }
 
 /* Donut legend */
-.legend {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem 0.75rem;
-  margin-top: 0.5rem;
-}
-.legend .item {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  color: var(--muted);
-}
-.legend .dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
+.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 0.75rem; margin-top: 0.5rem; }
+.legend .item { display: flex; align-items: center; gap: 0.45rem; color: var(--muted); }
+.legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 
 /* Lists / progress bars */
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  margin-top: 0.5rem;
-}
-.row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-.label {
-  min-width: 110px;
-  font-weight: 600;
-}
-.spacer {
-  flex: 1;
-  border-bottom: 1px dotted var(--border);
-  opacity: 0.6;
-}
-.value {
-  color: var(--muted);
-}
-:host ::ng-deep .p-progressbar {
-  flex: 1;
-  height: 8px;
-  background: #0d1730;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-}
-:host ::ng-deep .p-progressbar-value {
-  background: linear-gradient(90deg, #36d399, #2dd4bf);
-}
+.list { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.5rem; }
+.row { display: flex; align-items: center; gap: 0.75rem; }
+.label { min-width: 110px; font-weight: 600; }
+.spacer { flex: 1; border-bottom: 1px dotted var(--border); opacity: 0.6; }
+.value { color: var(--muted); }
+:host ::ng-deep .p-progressbar { flex: 1; height: 8px; background: #0d1730; border-radius: 999px; border: 1px solid var(--border); }
+:host ::ng-deep .p-progressbar-value { background: linear-gradient(90deg, #36d399, #2dd4bf); }
 
 /* Page content */
-.content {
-  max-width: 1200px;
-  margin: 1.25rem auto 0;
-}
-.title {
-  font-size: 32px;
-  font-weight: 800;
-  margin: 1.25rem 0.25rem;
-  letter-spacing: -0.015em;
-}
+.content { max-width: 1200px; margin: 1.25rem auto 0; }
+.title { font-size: 32px; font-weight: 800; margin: 1.25rem 0.25rem; letter-spacing: -0.015em; }
