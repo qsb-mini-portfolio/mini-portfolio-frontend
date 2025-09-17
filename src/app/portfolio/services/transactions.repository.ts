@@ -1,8 +1,11 @@
-import {Position, Transaction} from '../models';
+import {Position, Transaction, UiTransaction} from '../models';
 import {Injectable, Signal} from '@angular/core';
 
 export abstract class TransactionsRepository {
-  abstract readonly transactions: Signal<readonly Transaction[]>
+  abstract readonly transactions: Signal<readonly UiTransaction[]>
+  abstract readonly loading: Signal<boolean>;
+  abstract readonly error: Signal<string | null>;
+  abstract refresh(params?: { page?: number; size?: number}): void;
   abstract add(tx: Omit<Transaction, 'id'>): void;
   abstract clear(): void;
 }
@@ -26,7 +29,7 @@ export function buildPositions(
 ): Position[] {
   const bySymbol = new Map<string, number>();
   for (const t of txs) {
-    const qty = t.side === 'BUY' ? t.quantity : -t.quantity;
+    const qty = t.side === 'BUY' ? t.volume : -t.volume;
     bySymbol.set(t.symbol, (bySymbol.get(t.symbol) ?? 0) + qty);
   }
   const list: Position[] = [];

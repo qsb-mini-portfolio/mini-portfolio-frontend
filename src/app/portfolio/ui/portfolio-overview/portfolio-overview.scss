@@ -11,3 +11,25 @@ form.form {
   .amount { text-align: right; }
   .actions { display: flex; justify-content: flex-end; gap: .5rem; }
 }
+
+/* Lisibilité instruments */
+.instrument-symbol {
+  font-weight: 800;
+  color: var(--txt);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.instrument-name {
+  color: color-mix(in srgb, var(--txt) 92%, black 8%);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 420px;
+  display: inline-block;
+}
+
+/* Table densité & alignements légers */
+:host ::ng-deep .p-datatable tbody > tr > td:first-child { width: 120px; }
+:host ::ng-deep .p-datatable tbody > tr > td:nth-child(2) { max-width: 480px; }

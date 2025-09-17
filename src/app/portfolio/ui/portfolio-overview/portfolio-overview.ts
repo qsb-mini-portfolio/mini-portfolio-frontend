@@ -1,5 +1,5 @@
 import {Component, computed, inject, signal} from '@angular/core';
-import {LocalStorageTransactionsAdapter, PricingCatalog} from '../../services';
+import {HttpTransactionsAdapter, PricingCatalog} from '../../services';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {Side} from '../../models';
 import {CommonModule} from '@angular/common';
@@ -22,18 +22,22 @@ import {DatePickerModule} from 'primeng/datepicker';
   styleUrls: ['./portfolio-overview.scss']
 })
 export class PortfolioOverview {
-  private readonly repo = inject(LocalStorageTransactionsAdapter);
+  private readonly repo = inject(HttpTransactionsAdapter);
   private readonly fb = inject(FormBuilder);
   readonly catalog = inject(PricingCatalog);
 
   readonly transactions = this.repo.transactions;
-  readonly positions = this.repo.positions;
 
-  readonly positionsMutable = computed(() => [...this.positions()]);
   readonly transactionsMutable = computed(() => [...this.transactions()]);
 
 
   readonly showDialog = signal(false);
+
+  ngOnInit(): void {
+    this.repo.refresh();
+  }
+
+  retry() { this.repo.refresh() };
 
   readonly instruments = Object.keys(this.catalog.instrumentNames).map(sym =>
     (
@@ -47,7 +51,7 @@ export class PortfolioOverview {
       date: new Date(),
       symbol: this.instruments[0]?.value ?? 'ABC',
       side: 'BUY' as Side,
-      quantity: 100,
+      volume: 100,
       price: 100,
     }, { validators: [
         (g) => (g.value.quantity ?? 0) > 0 && (g.value.price ?? 0) > 0 ? null : { invalidNumbers: true }
@@ -55,8 +59,8 @@ export class PortfolioOverview {
   );
 
   readonly amount = computed(() => {
-    const { quantity, price } = this.form.getRawValue();
-    return (quantity ?? 0) * (price ?? 0);
+    const { volume, price } = this.form.getRawValue();
+    return (volume ?? 0) * (price ?? 0);
   });
 
   openDialog() {
@@ -73,7 +77,7 @@ export class PortfolioOverview {
       date: new Date(v.date).toISOString().slice(0,10),
       symbol: v.symbol,
       side: v.side,
-      quantity: v.quantity,
+      volume: v.volume,
       price: v.price
     });
     this.closeDialog();

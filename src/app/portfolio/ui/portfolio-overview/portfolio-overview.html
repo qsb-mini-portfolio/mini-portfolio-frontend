@@ -12,7 +12,7 @@
       <!-- Positions -->
       <p-card class="card">
         <ng-template pTemplate="header"><h2>Positions</h2></ng-template>
-        <p-table [value]="positionsMutable()" [tableStyle]="{'min-width':'800px'}">
+        <p-table [tableStyle]="{'min-width':'800px'}">
           <ng-template pTemplate="header">
             <tr>
               <th>Symbol</th><th>Name</th>
@@ -24,8 +24,8 @@
           </ng-template>
           <ng-template pTemplate="body" let-p>
             <tr>
-              <td><b>{{ p.symbol }}</b></td>
-              <td>{{ p.name }}</td>
+              <td><span class="instrument-symbol">{{ p.symbol }}</span></td>
+              <td><span class="instrument-name">{{ p.name }}</span></td>
               <td class="text-right">{{ p.quantity }}</td>
               <td class="text-right">{{ p.currentPrice | currency:'USD' }}</td>
               <td class="text-right">{{ p.marketValue  | currency:'USD' }}</td>
@@ -49,12 +49,12 @@
           </ng-template>
           <ng-template pTemplate="body" let-t>
             <tr>
-              <td>{{ t.date }}</td>
-              <td><b>{{ t.symbol }}</b></td>
+              <td>{{ t.dateIso }}</td>
+              <td><span class="instrument-symbol">{{ t.symbol }}</span></td>
               <td><p-tag [severity]="tagSeverity(t.side)" [value]="t.side"></p-tag></td>
-              <td class="text-right">{{ t.quantity }}</td>
+              <td class="text-right">{{ t.volume }}</td>
               <td class="text-right">{{ t.price | currency:'USD' }}</td>
-              <td class="text-right">{{ (t.quantity * t.price) | currency:'USD' }}</td>
+              <td class="text-right">{{ (t.volume * t.price) | currency:'USD' }}</td>
             </tr>
           </ng-template>
         </p-table>

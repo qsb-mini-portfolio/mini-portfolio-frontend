@@ -5,6 +5,6 @@ export interface Transaction {
     date: string;
     symbol: string;
     side: Side;
-    quantity: number;
+    volume: number;
     price: number;
 }
