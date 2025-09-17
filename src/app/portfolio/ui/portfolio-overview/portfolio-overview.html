@@ -49,12 +49,12 @@
           </ng-template>
           <ng-template pTemplate="body" let-t>
             <tr>
-              <td>{{ t.dateIso }}</td>
+              <td><span class="tab-number">{{ t.dateIso }}</span></td>
               <td><span class="instrument-symbol">{{ t.symbol }}</span></td>
               <td><p-tag [severity]="tagSeverity(t.side)" [value]="t.side"></p-tag></td>
-              <td class="text-right">{{ t.volume }}</td>
-              <td class="text-right">{{ t.price | currency:'USD' }}</td>
-              <td class="text-right">{{ (t.volume * t.price) | currency:'USD' }}</td>
+              <td class="text-right"><span class="tab-number">{{ t.volume }}</span></td>
+              <td class="text-right"><span class="tab-number">{{ t.price | currency:'USD' }}</span></td>
+              <td class="text-right"><span class="tab-number">{{ (t.volume * t.price) | currency:'USD' }}</span></td>
             </tr>
           </ng-template>
         </p-table>

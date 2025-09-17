@@ -29,6 +29,16 @@ form.form {
   max-width: 420px;
   display: inline-block;
 }
+.tab-number {
+  color: color-mix(in srgb, var(--txt) 92%, black 8%);
+  font-weight: 300;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 420px;
+  display: inline-block;
+}
+
 
 /* Table densité & alignements légers */
 :host ::ng-deep .p-datatable tbody > tr > td:first-child { width: 120px; }

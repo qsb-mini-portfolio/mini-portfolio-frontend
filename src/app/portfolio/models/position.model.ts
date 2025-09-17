@@ -1,7 +1,7 @@
 export interface Position {
   symbol: string;
   name: string;
-  quantity: number;
+  volume: number;
   currentPrice: number;
   marketValue: number;
   weightPct: number;
