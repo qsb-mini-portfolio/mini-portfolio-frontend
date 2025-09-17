@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../auth.service';
+import { UserService } from '../../Services/userService';
 
 @Component({
   standalone: true,
@@ -29,6 +30,7 @@ export class Login {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private auth = inject(AuthService);
+  private userService = inject(UserService);
 
   loading = signal(false);
   error = signal<string | null>(null);
@@ -46,7 +48,18 @@ export class Login {
     const { username, password } = this.form.getRawValue();
 
     this.auth.login(username!, password!).subscribe({
-      next: () => this.router.navigateByUrl('/dashboard'),
+      next: () => {
+        
+        this.userService.getMyData().subscribe({
+          next : (user) => {
+            localStorage.setItem('username',user.username);
+            this.router.navigateByUrl('/dashboard')
+          },
+       error: (e) => {
+        this.error.set("Impossible de récupérer les données utilisateurs")
+       }
+        });
+      },
       error: (e) => {
         this.error.set(e?.error?.message || 'Invalid credentials');
         this.loading.set(false);

@@ -6,6 +6,9 @@ export const API_ROUTES = {
     dashboard: {
         root: '/api/dashboard',
     },
+    user : {
+        getMe : '/user/'
+    },
   transaction: {
       root: '/transaction',
     stock: '/transaction/stock',

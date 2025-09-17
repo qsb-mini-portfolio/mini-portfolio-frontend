@@ -1,0 +1,62 @@
+<div class="container">
+  <h2>Personal Information</h2>
+
+  <div class="card">
+    <div class="profile">
+      <div class="avatar">
+        <i class="fas fa-user"></i>
+      </div>
+      <div>
+        <h3>{{ user.name }}</h3>
+        <p class="email">{{ user.email }}</p>
+      </div>
+    </div>
+
+    <form (ngSubmit)="saveChanges()">
+      <!-- Name -->
+      <label for="name">Name</label>
+
+      <!-- Password -->
+      <label for="password">Password</label>
+      <div class="password-field">
+        <input
+          id="password"
+          [type]="showPassword ? 'text' : 'password'"
+          name="password"
+        />
+        <button type="button" (click)="togglePassword()" class="icon-btn">
+          <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+        </button>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button type="submit" class="btn save">💾 Save Changes</button>
+        <button type="button" class="btn disconnect" (click)="disconnect()">
+          ⏏ Disconnect
+        </button>
+      </div>
+    </form>
+
+    <hr />
+
+    <!-- Security Section -->
+    <div class="security">
+      <h4>Account Security</h4>
+      <div class="toggle-2fa">
+        <label>
+          Two-Factor Authentication (2FA)
+          <input
+            type="checkbox"
+            (change)="toggle2FA()"
+          />
+        </label>
+        <p>Enhance your account security.</p>
+      </div>
+    </div>
+
+    <button class="btn deactivate" (click)="deactivateAccount()">
+      ❌ Deactivate Account
+    </button>
+  </div>
+</div>

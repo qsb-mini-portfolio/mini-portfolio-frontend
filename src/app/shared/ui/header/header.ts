@@ -18,6 +18,8 @@ export class AppHeader {
 
   isAuth = this.auth.isAuthenticated;
 
+  userNameLabel: string | null = localStorage.getItem("username")?.replace(/^"|"$/g, '') ?? null;
+
   go(url: string) {
     this.router.navigateByUrl(url);
   }
