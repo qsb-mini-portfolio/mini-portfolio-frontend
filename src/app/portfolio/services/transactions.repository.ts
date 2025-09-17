@@ -1,5 +1,8 @@
 import {Position, Transaction, UiTransaction} from '../models';
-import {Injectable, Signal} from '@angular/core';
+import {inject, Injectable, signal, Signal} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {API_BASE_URL} from '../../core/config/api-base-url.token';
+import {API_ROUTES} from '../../shared/api/api-routes';
 
 export abstract class TransactionsRepository {
   abstract readonly transactions: Signal<readonly UiTransaction[]>
@@ -8,16 +11,4 @@ export abstract class TransactionsRepository {
   abstract refresh(params?: { page?: number; size?: number}): void;
   abstract add(tx: Omit<Transaction, 'id'>): void;
   abstract clear(): void;
-}
-
-@Injectable({ providedIn: 'root'})
-export class PricingCatalog {
-  readonly instrumentNames: Record<string, string> = {
-    ABC: 'Tech Innovators Inc.',
-    XYZ: 'GlobalEnergy Corp.',
-    DEF: 'Health Solutions Ltd.',
-    GHI: 'Consumer Goods PLC',
-    JKL: 'Financial Services Group'
-  };
-  readonly currentPrices: Record<string, number> = { ABC:150, XYZ:200, DEF:120, GHI:50, JKL:80 };
 }

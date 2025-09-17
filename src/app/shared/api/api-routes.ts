@@ -5,5 +5,10 @@ export const API_ROUTES = {
     },
     dashboard: {
         root: '/api/dashboard',
-    }
+    },
+  transaction: {
+      root: '/transaction',
+    stock: '/transaction/stock',
+    stockBySymbol: (symbol: string) => `/transaction/stock/${encodeURIComponent(symbol)}`
+  }
 } as const;

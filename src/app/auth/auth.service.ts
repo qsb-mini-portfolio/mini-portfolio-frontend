@@ -3,7 +3,6 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenStorage } from './token-storage.service';
 import { catchError, map, tap, throwError } from 'rxjs';
-// env import retiré: base URL maintenant via injection token
 import { API_ROUTES } from '../shared/api/api-routes';
 import { API_BASE_URL } from '../core/config/api-base-url.token';
 

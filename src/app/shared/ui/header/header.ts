@@ -1,14 +1,15 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+
 import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../auth/auth.service';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [RouterModule, ButtonModule],
   templateUrl: './header.html',
-  styleUrls: ['./header.scss'],
+  styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppHeader {

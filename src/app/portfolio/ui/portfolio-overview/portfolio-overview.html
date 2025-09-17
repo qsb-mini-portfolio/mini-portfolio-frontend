@@ -26,7 +26,6 @@
             <tr>
               <td><span class="instrument-symbol">{{ p.symbol }}</span></td>
               <td><span class="instrument-name">{{ p.name }}</span></td>
-              <td class="text-right">{{ p.quantity }}</td>
               <td class="text-right">{{ p.currentPrice | currency:'USD' }}</td>
               <td class="text-right">{{ p.marketValue  | currency:'USD' }}</td>
               <td class="text-right">{{ p.weightPct | number:'1.0-0' }}%</td>
@@ -70,11 +69,11 @@
         <form [formGroup]="form" (ngSubmit)="submit()" class="form">
           <div class="row">
             <label>Date</label>
-            <p-datePicker formControlName="date" dateFormat="yy-mm-dd"></p-datePicker>
+            <p-datePicker formControlName="date" [showTime]="true" dateFormat="yy-mm-dd"></p-datePicker>
           </div>
           <div class="row">
             <label>Instrument</label>
-            <p-select formControlName="symbol" [options]="instruments"></p-select>
+            <input type="text" pInputText formControlName="symbol" placeholder="Symbol" class="w-full" />
           </div>
           <div class="row">
             <label>Side</label>
@@ -82,7 +81,7 @@
           </div>
           <div class="row">
             <label>Quantity</label>
-            <p-inputNumber formControlName="quantity" [min]="1"></p-inputNumber>
+            <p-inputNumber formControlName="volume" [min]="1"></p-inputNumber>
           </div>
           <div class="row">
             <label>Price</label>
@@ -93,7 +92,7 @@
 
           <div class="actions">
             <button pButton type="button" pButtonLabel="Cancel" class="p-button-text btn-ghost" (click)="closeDialog()"></button>
-            <button pButton type="submit" pButtonLabel="Save" pButtonIcon="pi pi-check" class="btn-primary" [disabled]="form.invalid"></button>
+            <button pButton type="submit" pButtonLabel="Save" pButtonIcon="pi pi-check" class="btn-primary" [disabled]="form.invalid">Add</button>
           </div>
         </form>
       </p-dialog>

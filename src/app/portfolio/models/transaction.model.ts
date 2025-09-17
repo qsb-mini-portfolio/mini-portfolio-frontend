@@ -8,3 +8,15 @@ export interface Transaction {
     volume: number;
     price: number;
 }
+
+export interface CreateTransactionRequest {
+  stockId: string;
+  price: number;
+  volume: number;
+  date: string;
+}
+
+export interface CreateStockRequest {
+  symbol: string;
+  name?: string;
+}

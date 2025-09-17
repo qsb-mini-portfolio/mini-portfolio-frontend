@@ -1,5 +1,5 @@
 import {Component, computed, inject, signal} from '@angular/core';
-import {HttpTransactionsAdapter, PricingCatalog} from '../../services';
+import {HttpTransactionsAdapter} from '../../services';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {Side} from '../../models';
 import {CommonModule} from '@angular/common';
@@ -11,23 +11,23 @@ import {DialogModule} from 'primeng/dialog';
 import {InputNumber, InputNumberModule} from 'primeng/inputnumber';
 import {Select} from 'primeng/select';
 import {DatePickerModule} from 'primeng/datepicker';
-
+import {InputText} from 'primeng/inputtext';
+import { startWith } from 'rxjs';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-portfolio-overview',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CardModule, TableModule, ButtonModule, TagModule, DialogModule,
-  InputNumberModule, Select, InputNumber, DatePickerModule],
+    InputNumberModule, Select, InputNumber, DatePickerModule, InputText],
   templateUrl: './portfolio-overview.html',
   styleUrls: ['./portfolio-overview.scss']
 })
 export class PortfolioOverview {
   private readonly repo = inject(HttpTransactionsAdapter);
   private readonly fb = inject(FormBuilder);
-  readonly catalog = inject(PricingCatalog);
 
   readonly transactions = this.repo.transactions;
-
   readonly transactionsMutable = computed(() => [...this.transactions()]);
 
 
@@ -39,27 +39,24 @@ export class PortfolioOverview {
 
   retry() { this.repo.refresh() };
 
-  readonly instruments = Object.keys(this.catalog.instrumentNames).map(sym =>
-    (
-      {
-        label: `${sym} - ${this.catalog.instrumentNames[sym]}`, value: sym
-      }
-    ));
-
   readonly form = this.fb.nonNullable.group(
     {
       date: new Date(),
-      symbol: this.instruments[0]?.value ?? 'ABC',
+      symbol: '' as string,
       side: 'BUY' as Side,
       volume: 100,
       price: 100,
     }, { validators: [
-        (g) => (g.value.quantity ?? 0) > 0 && (g.value.price ?? 0) > 0 ? null : { invalidNumbers: true }
+        (g) => (g.value.volume ?? 0) > 0 && (g.value.price ?? 0) > 0 ? null : { invalidNumbers: true }
       ]}
   );
 
+  readonly formValue = toSignal(this.form.valueChanges.pipe(startWith(this.form.getRawValue())), {
+    initialValue: this.form.getRawValue()
+  });
+
   readonly amount = computed(() => {
-    const { volume, price } = this.form.getRawValue();
+    const { volume, price } = this.formValue();
     return (volume ?? 0) * (price ?? 0);
   });
 
@@ -70,16 +67,17 @@ export class PortfolioOverview {
     this.showDialog.set(false);
   }
 
-  submit() {
+  async submit() {
     if (this.form.invalid) return;
     const v = this.form.getRawValue();
     this.repo.add({
-      date: new Date(v.date).toISOString().slice(0,10),
-      symbol: v.symbol,
+      date: new Date(v.date).toISOString().slice(0, 16),
+      symbol: v.symbol.trim().toUpperCase(),
       side: v.side,
       volume: v.volume,
       price: v.price
     });
+    console.log("Adding transaction: ", v, "")
     this.closeDialog();
   }
 
