@@ -21,8 +21,9 @@
               <th>Symbol</th>
               <th>Name</th>
               <th class="text-right">Quantity</th>
+              <th class="text-right">Bought Price</th>
               <th class="text-right">Market Value</th>
-              <th class="text-right">Yield</th>
+              <th class="text-right">Performance</th>
               <th class="text-right">% of Portfolio</th>
             </tr>
           </ng-template>
@@ -30,15 +31,16 @@
             <tr>
               <td><span class="instrument-symbol">{{ p.symbol }}</span></td>
               <td><span class="instrument-name">{{ p.name || p.symbol }}</span></td>
-              <td class="text-right">{{ p.volume }}</td>
+              <td class="text-right"><span class="tab-number">{{ p.volume }}</span></td>
+              <td class="text-right"><span class="tab-number">{{ p.boughtPrice || 0 | currency: 'USD' }}</span></td>
               <td class="text-right">
-                {{ +p.currentPrice || 0 | currency:'USD' }}
+                <span class="tab-number">{{ +p.currentPrice || 0 | currency:'USD' }}</span>
               </td>
               <td class="text-right">
-                {{ +p.yieldPct || 0 | percent }}
+                <span class="tab-number"><p-tag [severity]="tagPerformance(p.yieldPct)" [value]="p.yieldPct"></p-tag></span>
               </td>
               <td class="text-right">
-                {{ +p.weightPct || 0 | percent }}
+                <span class="tab-number">{{ +p.weightPct || 0 | percent }}</span>
               </td>
             </tr>
           </ng-template>
@@ -89,8 +91,7 @@
           <div class="row">
             <label>Instrument</label>
             <p-autoComplete
-            [(ngModel)]="symbolInput"
-            [ngModelOptions]="{standalone: true}"
+            formControlName="symbol"
             [suggestions]="suggestions"
             optionLabel="symbol"
             (completeMethod)="onSearch($event)"

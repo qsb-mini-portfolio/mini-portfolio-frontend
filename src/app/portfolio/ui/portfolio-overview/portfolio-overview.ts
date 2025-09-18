@@ -1,4 +1,4 @@
-import {Component, computed, inject, signal} from '@angular/core';
+import {Component, computed, inject, signal, OnInit} from '@angular/core';
 import {HttpTransactionsAdapter} from '../../services';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Side} from '../../models';
@@ -25,7 +25,7 @@ import {StockOption, StocksService} from '../../services/stocks.service';
   templateUrl: './portfolio-overview.html',
   styleUrls: ['./portfolio-overview.scss']
 })
-export class PortfolioOverview {
+export class PortfolioOverview implements OnInit {
   private readonly portfolio = inject(PortfolioService);
   private readonly repo = inject(HttpTransactionsAdapter);
   private readonly fb = inject(FormBuilder);
@@ -112,6 +112,10 @@ export class PortfolioOverview {
 
   tagSeverity(side: Side) {
     return side === 'BUY' ? 'success' : 'danger';
+  }
+
+  tagPerformance(pct?: number) {
+    return pct ? (pct > 0 ? 'success' : 'danger') : 'neutral';
   }
 
   retry() {

@@ -11,6 +11,9 @@ form.form {
   .amount { text-align: right; }
   .actions { display: flex; justify-content: flex-end; gap: .5rem; }
 }
+.p-card {
+  background: var(--bg-card);
+}
 
 /* Lisibilité instruments */
 .instrument-symbol {
