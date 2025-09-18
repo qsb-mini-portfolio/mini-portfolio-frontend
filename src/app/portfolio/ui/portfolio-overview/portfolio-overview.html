@@ -35,7 +35,7 @@
                 {{ +p.currentPrice || 0 | currency:'USD' }}
               </td>
               <td class="text-right">
-                {{ +p.dyield || 0 | percent }}
+                {{ +p.yieldPct || 0 | percent }}
               </td>
               <td class="text-right">
                 {{ +p.weightPct || 0 | percent }}
@@ -92,6 +92,7 @@
             [(ngModel)]="symbolInput"
             [ngModelOptions]="{standalone: true}"
             [suggestions]="suggestions"
+            optionLabel="symbol"
             (completeMethod)="onSearch($event)"
             (onSelect)="onPick($event)"
             [dropdown]="true"
