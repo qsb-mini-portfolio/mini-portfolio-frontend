@@ -1,13 +1,14 @@
 export const API_ROUTES = {
     auth: {
-        login: '/api/auth/login',
-        register: '/api/auth/register',
+        login: '/auth/login',
+        register: '/auth/register',
+        checkAuth : '/auth/checkAuth'
     },
     dashboard: {
-        root: '/api/dashboard',
+        root: '/dashboard',
     },
     user : {
-        getMe : '/user/'
+        getMe : '/user'
     },
   transaction: {
       root: '/transaction',

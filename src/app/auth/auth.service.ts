@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenStorage } from './token-storage.service';
-import { catchError, map, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { API_ROUTES } from '../shared/api/api-routes';
 import { API_BASE_URL } from '../core/config/api-base-url.token';
 
@@ -56,7 +56,21 @@ export class AuthService {
   logout() {
     this.store.clear();
     this.isAuthenticated.set(false);
+    localStorage.clear();
     this.router.navigateByUrl('/login');
+  }
+
+  checkAuth(token: string): Observable<boolean> {
+    return this.http.post<boolean>(
+      `${this.apiBase}${API_ROUTES.auth.checkAuth}`,
+      {}, 
+      {
+        params: { token },
+        observe: 'response'
+      }
+    ).pipe(
+      map(response => !!response.body),
+    );
   }
 }
 
