@@ -81,7 +81,7 @@ export class Dashboard {
   };
 
   // ApexCharts — Asset Allocation (donut)
-  donutSeries = [40, 30, 20, 10];
+  donutSeries = [40, 30, 10, 10];
   donutOptions: any = {
     chart: { type: 'donut', height: 300 },
     labels: ['Equities', 'Fixed Income', 'Alternatives', 'Cash'],

@@ -1,8 +1,5 @@
-import {Position, Transaction, UiTransaction} from '../models';
-import {inject, Injectable, signal, Signal} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {API_BASE_URL} from '../../core/config/api-base-url.token';
-import {API_ROUTES} from '../../shared/api/api-routes';
+import { Transaction, UiTransaction} from '../models';
+import {Signal} from '@angular/core';
 
 export abstract class TransactionsRepository {
   abstract readonly transactions: Signal<readonly UiTransaction[]>

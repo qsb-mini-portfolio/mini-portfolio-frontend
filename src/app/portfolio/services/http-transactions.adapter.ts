@@ -17,6 +17,8 @@ export class HttpTransactionsAdapter extends TransactionsRepository {
   private readonly _data = signal<readonly UiTransaction[]>([]);
   private readonly _loading = signal(false);
   private readonly _error = signal<string | null>(null);
+  private readonly _mutations = signal(0);
+  readonly mutations = this._mutations.asReadonly();
 
   readonly transactions = this._data.asReadonly();
   readonly loading = this._loading.asReadonly();
@@ -65,7 +67,7 @@ export class HttpTransactionsAdapter extends TransactionsRepository {
     const cached = this.stockCache.get(key);
     if (cached) return of(cached);
 
-    return this.http.get<StockLookupDto>(`${this.apiBase}${API_ROUTES.transaction.stockBySymbol(key)}`).pipe(
+    return this.http.get<StockLookupDto>(`${this.apiBase}${API_ROUTES.stock.stockBySymbol(key)}`).pipe(
       tap(dto => this.stockCache.set(key, {...dto, symbol:key}))
     );
   }
@@ -76,7 +78,7 @@ export class HttpTransactionsAdapter extends TransactionsRepository {
       symbol: key, name: key
     };
 
-    return this.http.post<StockLookupDto>(`${this.apiBase}${API_ROUTES.transaction.stock}`, body).pipe(
+    return this.http.post<StockLookupDto>(`${this.apiBase}${API_ROUTES.stock.root}`, body).pipe(
       tap(dto => {
         this.stockCache.set(key, { ...dto, symbol: key})
       })
@@ -148,6 +150,7 @@ export class HttpTransactionsAdapter extends TransactionsRepository {
           amount: Math.abs(created.volume) * created.price
         };
         this._data.set([mapped, ...prev]);
+        this._mutations.update(n => n+1);
       } else {
         this.refresh();
       }

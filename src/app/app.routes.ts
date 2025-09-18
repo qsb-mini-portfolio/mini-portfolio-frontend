@@ -17,7 +17,7 @@ export const routes: Routes = [
   { path: '', component: RedirectComponent, canActivate: [authRedirectGuard], pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
-  { path: 'portfolio', component: PortfolioOverview},
+  { path: 'portfolio', component: PortfolioOverview, canMatch: [authGuard]},
   { path: 'dashboard', component: Dashboard, canMatch: [authGuard] },
   { path: 'userPage', component: UserPage,  canMatch: [authGuard]},
   { path: '**', redirectTo: 'login' },

@@ -1,6 +1,6 @@
 import {Component, computed, inject, signal} from '@angular/core';
 import {HttpTransactionsAdapter} from '../../services';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Side} from '../../models';
 import {CommonModule} from '@angular/common';
 import {CardModule} from 'primeng/card';
@@ -11,33 +11,61 @@ import {DialogModule} from 'primeng/dialog';
 import {InputNumber, InputNumberModule} from 'primeng/inputnumber';
 import {Select} from 'primeng/select';
 import {DatePickerModule} from 'primeng/datepicker';
-import {InputText} from 'primeng/inputtext';
-import { startWith } from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, startWith, Subject, tap} from 'rxjs';
 import {toSignal} from '@angular/core/rxjs-interop';
+import {PortfolioService} from '../../services/portfolio.service';
+import {AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent} from 'primeng/autocomplete';
+import {StockOption, StocksService} from '../../services/stocks.service';
 
 @Component({
   selector: 'app-portfolio-overview',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CardModule, TableModule, ButtonModule, TagModule, DialogModule,
-    InputNumberModule, Select, InputNumber, DatePickerModule, InputText],
+    InputNumberModule, Select, InputNumber, DatePickerModule, AutoComplete, FormsModule],
   templateUrl: './portfolio-overview.html',
   styleUrls: ['./portfolio-overview.scss']
 })
 export class PortfolioOverview {
+  private readonly portfolio = inject(PortfolioService);
   private readonly repo = inject(HttpTransactionsAdapter);
   private readonly fb = inject(FormBuilder);
 
   readonly transactions = this.repo.transactions;
   readonly transactionsMutable = computed(() => [...this.transactions()]);
 
+  private readonly stocks = inject(StocksService);
+
+  positions = this.portfolio.positions;
+  loading = this.portfolio.loading;
+  error = this.portfolio.error;
 
   readonly showDialog = signal(false);
 
-  ngOnInit(): void {
-    this.repo.refresh();
-  }
+  symbolInput = '';
+  suggestions: StockOption[] = [];
+  lastQuery = '';
+  searching = false;
 
-  retry() { this.repo.refresh() };
+  private query$ = new Subject<string>();
+
+  async ngOnInit() {
+    this.repo.refresh();
+    this.portfolio.refresh();
+
+    await this.stocks.ensureLoaded();
+
+    this.query$
+      .pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        tap(q => { this.searching = true; this.lastQuery = q;}),
+        map(q => this.stocks.filterLocal(q, 20)),
+        tap(() => this.searching = false)
+        )
+      .subscribe(list => this.suggestions = list);
+
+    this.suggestions = this.stocks.filterLocal('', 20);
+  }
 
   readonly form = this.fb.nonNullable.group(
     {
@@ -79,12 +107,50 @@ export class PortfolioOverview {
     });
     console.log("Adding transaction: ", v, "")
     this.closeDialog();
+    this.portfolio.refresh();
   }
 
   tagSeverity(side: Side) {
     return side === 'BUY' ? 'success' : 'danger';
   }
 
-  trackBySymbol = (_: number, p: any) => p.symbol;
-  trackById = (_: number, t:any) => t.id;
+  retry() {
+    this.repo.refresh()
+    this.portfolio.refresh()
+  };
+
+  onSearch(event: AutoCompleteCompleteEvent) {
+    this.query$.next(event.query ?? '');
+  }
+
+  onPick(event: AutoCompleteSelectEvent) {
+    const opt = event.value as StockOption;
+    this.form.patchValue({symbol: opt.symbol});
+    this.symbolInput = opt.symbol;
+  }
+
+  canAdd(): boolean {
+    const q = this.lastQuery?.trim();
+    if (!q) return false;
+    const qU = q.toUpperCase();
+    const exists = this.suggestions.some(s => s.symbol === qU);
+    return (!this.searching && !exists);
+  }
+
+  async createFromQuery() {
+    const q = (this.lastQuery ?? '').trim();
+    if (!q) return;
+
+    this.searching = true;
+
+    try {
+      const created = await this.stocks.create(q, q);
+      this.form.patchValue({symbol: created.symbol});
+      this.symbolInput = created.symbol;
+
+      this.suggestions = this.stocks.filterLocal('', 20);
+    } finally {
+      this.searching = false;
+    }
+  }
 }

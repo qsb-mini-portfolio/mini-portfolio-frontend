@@ -1,18 +1,19 @@
 export const API_ROUTES = {
-    auth: {
-        login: '/auth/login',
-        register: '/auth/register',
-        checkAuth : '/auth/checkAuth'
-    },
-    dashboard: {
-        root: '/dashboard',
-    },
-    user : {
-        getMe : '/user'
-    },
+  auth: {
+    login: '/auth/login',
+    register: '/auth/register',
+  },
   transaction: {
-      root: '/transaction',
-    stock: '/transaction/stock',
-    stockBySymbol: (symbol: string) => `/transaction/stock/${encodeURIComponent(symbol)}`
+    root: '/transaction',
+  },
+  portfolio: {
+    root: '/portfolio',
+  },
+  user : {
+    getMe : '/user'
+  },
+  stock: {
+    root: '/stock',
+    stockBySymbol: (symbol: string) => `/stock/${encodeURIComponent(symbol)}`,
   }
 } as const;
