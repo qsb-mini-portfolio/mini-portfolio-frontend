@@ -25,6 +25,22 @@ export class DashboardService {
     return y == null ? null : y * 100;
   });
 
+  readonly sectorDonutSeries = computed(() => {
+    const data = this._raw();
+    if (!data) return [];
+
+    const sectors = data.sectors ?? [];
+    return sectors.map(s => s.currentPrice ?? 0);
+  });
+
+  readonly sectorDonutLabels = computed(() => {
+    const data = this._raw();
+    if (!data) return [];
+
+    const sectors = data.sectors ?? [];
+    return sectors.map(s => s.sector);
+  });
+
   readonly sectorChartData = computed(() => {
     const d = this._raw();
     if (!d) return {labels: [], datasets: []};

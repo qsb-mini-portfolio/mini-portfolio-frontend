@@ -30,9 +30,9 @@
         <div class="panel-title">Asset Allocation</div>
         <apx-chart
           class="apex-donut"
-          [series]="donutSeries"
+          [series]="donutSeries()"
           [chart]="donutOptions.chart"
-          [labels]="donutOptions.labels"
+          [labels]="donutLabels()"
           [colors]="donutOptions.colors"
           [dataLabels]="donutOptions.dataLabels"
           [stroke]="donutOptions.stroke"
@@ -40,20 +40,6 @@
           [legend]="donutOptions.legend"
         >
         </apx-chart>
-
-        <!-- Legend custom -->
-        <div class="legend">
-          <div class="item">
-            <span class="dot" style="background: #ff6aa3"></span>Equities (40%)
-          </div>
-          <div class="item">
-            <span class="dot" style="background: #6b74ff"></span>Fixed Income (30%)
-          </div>
-          <div class="item">
-            <span class="dot" style="background: #7b5cff"></span>Alternatives (20%)
-          </div>
-          <div class="item"><span class="dot" style="background: #2a3344"></span>Cash (10%)</div>
-        </div>
       </p-card>
     </div>
 

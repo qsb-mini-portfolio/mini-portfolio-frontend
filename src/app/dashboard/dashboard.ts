@@ -88,15 +88,15 @@ export class Dashboard {
   };
 
   // ApexCharts — Asset Allocation (donut)
-  donutSeries = [40, 30, 10, 10];
+  readonly donutSeries = this.api.sectorDonutSeries;
+  readonly donutLabels = this.api.sectorDonutLabels;
   donutOptions: any = {
     chart: { type: 'donut', height: 300 },
-    labels: this.api.sectorChartData().labels,
-    colors: ['#ff6aa3', '#6b74ff', '#7b5cff', '#2a3344'],
     dataLabels: { enabled: false },
+    colors: ['#ff6aa3', '#6b74ff', '#7b5cff', '#2a3344'],
     stroke: { width: 0 },
     plotOptions: { pie: { donut: { size: '72%' } } },
-    legend: { show: false },
+    legend: { position: 'bottom' },
   };
 
   sectors = [
@@ -114,7 +114,7 @@ export class Dashboard {
     { code: 'JPY', v: 5 },
   ];
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.api.load();
   }
 }
