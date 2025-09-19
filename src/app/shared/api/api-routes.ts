@@ -9,6 +9,7 @@ export const API_ROUTES = {
   },
   portfolio: {
     root: '/portfolio',
+    dashboard: '/portfolio/dashboard',
   },
   user : {
     getMe : '/user'
