@@ -11,7 +11,8 @@ export const API_ROUTES = {
     root: '/portfolio',
   },
   user : {
-    getMe : '/user'
+    getMe : '/user',
+    changeEmail :'/user/email'
   },
   stock: {
     root: '/stock',

@@ -1,6 +1,5 @@
 <div class="container">
   <h2>Personal Information</h2>
-
   <div class="card">
     <div class="profile">
       <div class="avatar">
@@ -11,18 +10,17 @@
       </div>
     </div>
 
-    <form (ngSubmit)="saveChanges()">
+    <form [formGroup]="form" (ngSubmit)="saveChanges()">
+      <div class="form-row">
+        <label for="email">Email :</label>
+        <input id="emailValue" type="text" formControlName="email" value= {{user?.email}}>
+      </div>
 
-
-      <!-- Actions -->
+      <hr />
       <div class="actions">
-        <button type="submit" class="btn save"> Click</button>
-        <button type="button" class="btn disconnect" (click)="disconnect()">
-          ⏏ Disconnect
-        </button>
+        <button type="submit" class="btn save">Change email</button>
+        <button type="button" class="btn disconnect" (click)="disconnect()">Disconnect</button>
       </div>
     </form>
-    <hr />
-
   </div>
 </div>

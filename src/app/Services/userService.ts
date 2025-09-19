@@ -16,4 +16,11 @@ export class UserService {
             `${this.apiBase}${API_ROUTES.user.getMe}`,
         )
     }
+
+    changeEmail(newEmail : string): Observable<userResponse>{
+        return this.http.put<userResponse>(
+            `${this.apiBase}${API_ROUTES.user.changeEmail}`,
+            { email : newEmail}
+        );
+    }
 }
