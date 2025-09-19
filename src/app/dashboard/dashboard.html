@@ -6,46 +6,25 @@
     <div class="dash-grid dash-gap">
       <p-card class="kpi span-1">
         <div class="kpi-title">Net Asset Value (NAV)</div>
-        <div class="kpi-value">${{ nav | number: '1.0-2' }}</div>
+        <div class="kpi-value">${{ nav() ?? 0 | number: '1.0-2' }}</div>
       </p-card>
 
       <p-card class="kpi span-1">
         <div class="kpi-title">Performance (%)</div>
-        <div class="kpi-value green">{{ perfPct | number: '1.2-2' }}%</div>
-      </p-card>
-
-      <p-card class="kpi span-1">
-        <div class="kpi-title">Daily Evolution</div>
-        <div class="kpi-row">
-          <span class="kpi-value green">+{{ dailyPct | number: '1.2-2' }}%</span>
-          <span class="delta">+${{ dailyDelta | number: '1.0-2' }}</span>
+        <div
+          class="kpi-value"
+          [ngClass]="{
+            'green': (perfPct() ?? 0) > 0,
+            'red': (perfPct() ?? 0) < 0
+          }"
+        >
+          {{ perfPct() ?? 0 | number:'1.2-2' }}%
         </div>
       </p-card>
     </div>
 
     <!-- Charts row -->
     <div class="dash-grid dash-gap">
-      <p-card class="panel span-2">
-        <div class="panel-title">
-          NAV Over Time
-          <span class="muted right">Last 12 Months <span class="green">+12.34%</span></span>
-        </div>
-        <apx-chart
-          class="apex-area"
-          [series]="areaSeries"
-          [chart]="areaOptions.chart"
-          [dataLabels]="areaOptions.dataLabels"
-          [stroke]="areaOptions.stroke"
-          [colors]="areaOptions.colors"
-          [fill]="areaOptions.fill"
-          [grid]="areaOptions.grid"
-          [xaxis]="areaOptions.xaxis"
-          [yaxis]="areaOptions.yaxis"
-          [tooltip]="areaOptions.tooltip"
-          [legend]="areaOptions.legend"
-        >
-        </apx-chart>
-      </p-card>
 
       <p-card class="panel span-1">
         <div class="panel-title">Asset Allocation</div>

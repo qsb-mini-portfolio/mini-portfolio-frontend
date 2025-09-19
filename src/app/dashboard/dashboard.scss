@@ -39,7 +39,15 @@
 }
 .kpi { padding: 1rem 1.25rem; }
 .kpi-title { color: var(--muted); font-weight: 600; margin-bottom: 0.35rem; }
-.kpi-value { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+.kpi-value {
+  font-size: 26px; font-weight: 800; letter-spacing: -0.01em;
+  &.green {
+    color: var(--success);
+  }
+  &.red {
+    color: var(--failure);
+  }
+}
 .kpi-row { display: flex; align-items: baseline; gap: 0.5rem; }
 .green { color: var(--success); }
 .delta { color: #62e1a0; font-weight: 600; }

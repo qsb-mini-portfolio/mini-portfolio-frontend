@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import {Component, ChangeDetectionStrategy, inject, computed} from '@angular/core';
+import {DecimalPipe, NgClass} from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
@@ -8,6 +8,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { AvatarModule } from 'primeng/avatar';
 import { RippleModule } from 'primeng/ripple';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import {DashboardService} from '../portfolio/services/dashboard.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -22,17 +23,23 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     AvatarModule,
     RippleModule,
     NgApexchartsModule,
+    NgClass,
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dashboard {
+  private readonly api = inject(DashboardService);
+  readonly data = this.api.raw;
+  readonly loading = this.api.loading;
+  readonly error = this.api.error;
+
   // KPIs mock
-  nav = 1234567.89;
-  perfPct = 12.34;
-  dailyPct = 0.56;
-  dailyDelta = 6892.12;
+  nav = this.api.netValue;
+  perfPct = this.api.performancePct;
+
+  readonly sectorChartData= this.api.sectorChartData;
 
   // ApexCharts — NAV Over Time (area)
   areaSeries = [
@@ -84,7 +91,7 @@ export class Dashboard {
   donutSeries = [40, 30, 10, 10];
   donutOptions: any = {
     chart: { type: 'donut', height: 300 },
-    labels: ['Equities', 'Fixed Income', 'Alternatives', 'Cash'],
+    labels: this.api.sectorChartData().labels,
     colors: ['#ff6aa3', '#6b74ff', '#7b5cff', '#2a3344'],
     dataLabels: { enabled: false },
     stroke: { width: 0 },
@@ -106,4 +113,8 @@ export class Dashboard {
     { code: 'GBP', v: 10 },
     { code: 'JPY', v: 5 },
   ];
+
+  ngOnInit(): void {
+    this.api.load();
+  }
 }
