@@ -4,10 +4,10 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {ApiTransactionPage, CreateStockRequest, CreateTransactionRequest, Transaction, UiTransaction} from '../models';
 import {API_BASE_URL} from '../../core/config/api-base-url.token';
 import {API_ROUTES} from '../../shared/api/api-routes';
-import {of, tap, switchMap, catchError, map, throwError} from 'rxjs';
+import {of, tap, switchMap, catchError, map, throwError, Observable} from 'rxjs';
 
 type StockLookupDto = { stockId: string; symbol: string; name?: string };
-
+export type ImportResult = { detectedRows: number; savedRows: number};
 @Injectable({providedIn: 'root'})
 export class HttpTransactionsAdapter extends TransactionsRepository {
 
@@ -155,6 +155,13 @@ export class HttpTransactionsAdapter extends TransactionsRepository {
         this.refresh();
       }
     })
+  }
+
+  importCsv(file: File): Observable<ImportResult> {
+    const form = new FormData();
+    form.append('file', file);
+
+    return this.http.post<ImportResult>(`${this.apiBase}${API_ROUTES.transaction.import}`, form);
   }
 
   clear(): void {

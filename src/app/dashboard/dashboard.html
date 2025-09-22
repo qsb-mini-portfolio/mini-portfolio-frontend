@@ -3,100 +3,48 @@
     <h1 class="title">Portfolio &amp; Compliance Dashboard</h1>
 
     <!-- KPI cards -->
-    <div class="dash-grid dash-gap">
-      <p-card class="kpi span-1">
-        <div class="kpi-title">Net Asset Value (NAV)</div>
-        <div class="kpi-value">${{ nav() ?? 0 | number: '1.0-2' }}</div>
-      </p-card>
+    <section class="section">
+      <div class="kpi-grid">
+        <p-card class="kpi">
+          <div class="kpi-title">Net Asset Value (NAV)</div>
+          <div class="kpi-value">${{ (nav() ?? 0) | number: '1.0-2' }}</div>
+        </p-card>
 
-      <p-card class="kpi span-1">
-        <div class="kpi-title">Performance (%)</div>
-        <div
-          class="kpi-value"
-          [ngClass]="{
-            'green': (perfPct() ?? 0) > 0,
-            'red': (perfPct() ?? 0) < 0
-          }"
-        >
-          {{ perfPct() ?? 0 | number:'1.2-2' }}%
-        </div>
-      </p-card>
-    </div>
+        <p-card class="kpi">
+          <div class="kpi-title">Performance (%)</div>
+          <div
+            class="kpi-value"
+            [ngClass]="{
+              'green': (perfPct() ?? 0) > 0,
+              'red': (perfPct() ?? 0) < 0
+            }"
+          >
+            {{ (perfPct() ?? 0) | number:'1.2-2' }}%
+          </div>
+        </p-card>
+      </div>
+    </section>
 
     <!-- Charts row -->
-    <div class="dash-grid dash-gap">
+    <section class="section">
+      <div class="panel-grid">
+        <p-card class="panel span-full">
+          <div class="panel-title">Asset Allocation</div>
+          <apx-chart
+            class="apex-donut"
+            [series]="donutSeries()"
+            [chart]="donutOptions.chart"
+            [labels]="donutLabels()"
+            [colors]="donutOptions.colors"
+            [dataLabels]="donutOptions.dataLabels"
+            [stroke]="donutOptions.stroke"
+            [plotOptions]="donutOptions.plotOptions"
+            [legend]="donutOptions.legend"
+          >
+          </apx-chart>
+        </p-card>
+      </div>
+    </section>
 
-      <p-card class="panel span-1">
-        <div class="panel-title">Asset Allocation</div>
-        <apx-chart
-          class="apex-donut"
-          [series]="donutSeries()"
-          [chart]="donutOptions.chart"
-          [labels]="donutLabels()"
-          [colors]="donutOptions.colors"
-          [dataLabels]="donutOptions.dataLabels"
-          [stroke]="donutOptions.stroke"
-          [plotOptions]="donutOptions.plotOptions"
-          [legend]="donutOptions.legend"
-        >
-        </apx-chart>
-      </p-card>
-    </div>
-
-    <!-- Bottom row -->
-    <div class="dash-grid dash-gap">
-      <p-card class="panel span-1">
-        <div class="panel-title">Sector Distribution</div>
-        <div class="list">
-          @for (s of sectors; track s.name) {
-            <div class="row">
-              <span class="label" [style.color]="s.color">{{ s.name }}</span>
-              <span class="spacer"></span>
-              <span class="value">{{ s.v }}%</span>
-            </div>
-          }
-        </div>
-      </p-card>
-
-      <p-card class="panel span-1">
-        <div class="panel-title">Currency Distribution</div>
-        <div class="list">
-          @for (c of currencies; track c.code) {
-            <div class="row">
-              <span class="label">{{ c.code }}</span>
-              <p-progressBar [value]="c.v" class="bar"></p-progressBar>
-              <span class="value">{{ c.v }}%</span>
-            </div>
-          }
-        </div>
-      </p-card>
-
-      <p-card class="panel span-1">
-        <div class="panel-title">Compliance Alerts</div>
-        <div class="alerts">
-          <div class="alert">
-            <i class="pi pi-shield" style="color: #22c55e"></i>
-            <div>
-              <div class="alert-title">No Compliance Alerts</div>
-              <div class="muted">Your portfolio is fully compliant.</div>
-            </div>
-          </div>
-          <div class="alert">
-            <i class="pi pi-exclamation-triangle" style="color: #f59e0b"></i>
-            <div>
-              <div class="alert-title">Minor Breach</div>
-              <div class="muted">Asset XYZ exceeds concentration limit.</div>
-            </div>
-          </div>
-          <div class="alert">
-            <i class="pi pi-ban" style="color: #ef4444"></i>
-            <div>
-              <div class="alert-title">Critical Alert</div>
-              <div class="muted">Unauthorized security detected.</div>
-            </div>
-          </div>
-        </div>
-      </p-card>
-    </div>
   </div>
 </div>

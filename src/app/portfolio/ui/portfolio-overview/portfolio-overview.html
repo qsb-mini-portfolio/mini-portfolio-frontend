@@ -6,6 +6,10 @@
           <h1 class="title">Portfolio Overview</h1>
           <p class="muted">View your current positions and recent transactions.</p>
         </div>
+        <button pButton class="btn-warning" (click)="openImport()">
+          <i class="pi pi-table"></i>
+          <span class="ml-2">Import CSV</span>
+        </button>
         <button pButton class="btn-primary" (click)="openDialog()">
           <i class="pi pi-plus"></i>
           <span class="ml-2">Add transaction</span>
@@ -32,15 +36,15 @@
               <td><span class="instrument-symbol">{{ p.symbol }}</span></td>
               <td><span class="instrument-name">{{ p.name || p.symbol }}</span></td>
               <td class="text-right"><span class="tab-number">{{ p.volume }}</span></td>
-              <td class="text-right"><span class="tab-number">{{ p.boughtPrice || 0 | currency: 'USD' }}</span></td>
+              <td class="text-right"><span class="tab-number">{{ (p.boughtPrice || 0) | currency: 'USD' }}</span></td>
               <td class="text-right">
-                <span class="tab-number">{{ +p.currentPrice || 0 | currency:'USD' }}</span>
+                <span class="tab-number">{{ (+p.currentPrice || 0) | currency:'USD' }}</span>
               </td>
               <td class="text-right">
                 <span class="tab-number"><p-tag [severity]="tagPerformance(p.yieldPct)" [value]="p.yieldPct"></p-tag></span>
               </td>
               <td class="text-right">
-                <span class="tab-number">{{ +p.weightPct || 0 | percent }}</span>
+                <span class="tab-number">{{ (p.weightPct ?? 0) | percent:'1.0-2' }}</span>
               </td>
             </tr>
           </ng-template>
@@ -76,6 +80,9 @@
         </p-table>
       </p-card>
 
+      <!-- CSV Dialog -->
+      <app-import-csv-dialog #csvDlg (completed)="onCsvImported($event)"></app-import-csv-dialog>
+
       <!-- Dialog -->
       <p-dialog
         [visible]="showDialog()"
@@ -93,13 +100,12 @@
             <p-autoComplete
             formControlName="symbol"
             [suggestions]="suggestions"
-            optionLabel="symbol"
+            field="symbol"
             (completeMethod)="onSearch($event)"
             (onSelect)="onPick($event)"
             [dropdown]="true"
             [minlength]="0"
             [delay]="0"
-            [forceSelection]="false"
             inputId="instrument-ac"
             placeholder="Type a symbol or name"
             class="w-full">

@@ -1,4 +1,4 @@
-import {Component, computed, inject, signal, OnInit} from '@angular/core';
+import {Component, computed, inject, signal, OnInit, ViewChild} from '@angular/core';
 import {HttpTransactionsAdapter} from '../../services';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Side} from '../../models';
@@ -16,12 +16,13 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {PortfolioService} from '../../services/portfolio.service';
 import {AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent} from 'primeng/autocomplete';
 import {StockOption, StocksService} from '../../services/stocks.service';
+import {ImportCsvDialog} from './import-csv-dialog';
 
 @Component({
   selector: 'app-portfolio-overview',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CardModule, TableModule, ButtonModule, TagModule, DialogModule,
-    InputNumberModule, Select, InputNumber, DatePickerModule, AutoComplete, FormsModule],
+    InputNumberModule, Select, InputNumber, DatePickerModule, AutoComplete, FormsModule, ImportCsvDialog],
   templateUrl: './portfolio-overview.html',
   styleUrls: ['./portfolio-overview.scss']
 })
@@ -47,6 +48,18 @@ export class PortfolioOverview implements OnInit {
   searching = false;
 
   private query$ = new Subject<string>();
+
+  @ViewChild('csvDlg') csvDlg!: ImportCsvDialog;
+
+  openImport() {
+    this.csvDlg.open();
+  }
+
+  onCsvImported(_: {detectedRows: number; savedRows: number}) {
+    this.repo.refresh();
+
+    this.portfolio.refresh();
+  }
 
   async ngOnInit() {
     this.repo.refresh();

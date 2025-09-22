@@ -6,6 +6,7 @@ export const API_ROUTES = {
   },
   transaction: {
     root: '/transaction',
+    import: '/transaction/import',
   },
   portfolio: {
     root: '/portfolio',
