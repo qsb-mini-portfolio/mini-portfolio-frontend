@@ -1,4 +1,4 @@
 export const env = {
   production: false,
-  apiUrl: 'http://localhost:8080'
+  apiUrl: 'https://mini-portfolio-app-offeh.ondigitalocean.app'
 };
