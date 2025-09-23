@@ -15,7 +15,7 @@ export class DemoService {
   private readonly userService = inject(UserService);
 
   startDemo() {
-    this.auth.login('demo', 'demo').subscribe(
+    this.auth.login('demo', 'demoPassword').subscribe(
       {
         next: () => {
 
