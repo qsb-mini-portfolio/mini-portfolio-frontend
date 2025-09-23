@@ -15,23 +15,22 @@ export class DemoService {
   private readonly userService = inject(UserService);
 
   startDemo() {
+    this.http.get(`${this.base}${API_ROUTES.demo.root}`, { responseType: 'text' })
+      .subscribe({
+        next: (token: string) => {
+          localStorage.setItem('auth_token', token?.trim() ?? '');
+        },
+        error: (err) => {
+          console.error('Demo start failed', err);
+        }
+      });
     this.auth.login('demo', 'demoPassword').subscribe(
       {
         next: () => {
           this.userService.getMyData().subscribe({
             next : (user) => {
               localStorage.setItem('username',user.username);
-              this.http.get(`${this.base}${API_ROUTES.demo.root}`, { responseType: 'text' })
-                .subscribe({
-                  next: (token: string) => {
-                    localStorage.setItem('auth_token', token?.trim() ?? '');
-                    this.router.navigate(['/dashboard']);
-                  },
-                  error: (err) => {
-                    console.error('Demo start failed', err);
-                    this.router.navigate(['/dashboard']);
-                  }
-                });
+              this.router.navigate(['/dashboard']);
             }
           });
         }
