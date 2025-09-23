@@ -41,7 +41,7 @@
                 <span class="tab-number">{{ (+p.currentPrice || 0) | currency:'USD' }}</span>
               </td>
               <td class="text-right">
-                <span class="tab-number"><p-tag [severity]="tagPerformance(p.yieldPct)" [value]="p.yieldPct"></p-tag></span>
+                <span class="tab-number"><p-tag [severity]="tagPerformance(p.yieldPct)" [value]="formatYield(p.yieldPct)"></p-tag></span>
               </td>
               <td class="text-right">
                 <span class="tab-number">{{ (p.weightPct ?? 0) | percent:'1.0-2' }}</span>
@@ -100,7 +100,6 @@
             <p-autoComplete
             formControlName="symbol"
             [suggestions]="suggestions"
-            field="symbol"
             (completeMethod)="onSearch($event)"
             (onSelect)="onPick($event)"
             [dropdown]="true"

@@ -131,6 +131,14 @@ export class PortfolioOverview implements OnInit {
     return pct ? (pct > 0 ? 'success' : 'danger') : 'neutral';
   }
 
+  formatYield(yieldPct?: number): string {
+    if (yieldPct === undefined || yieldPct === null) {
+      return '';
+    }
+    const percentage = yieldPct * 100;
+    return `${percentage.toFixed(2)}%`;
+  }
+
   retry() {
     this.repo.refresh()
     this.portfolio.refresh()
