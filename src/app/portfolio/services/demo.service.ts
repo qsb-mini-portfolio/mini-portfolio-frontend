@@ -25,6 +25,7 @@ export class DemoService {
                 .subscribe({
                   next: (token: string) => {
                     localStorage.setItem('auth_token', token?.trim() ?? '');
+                    this.router.navigate(['/dashboard']);
                   },
                   error: (err) => {
                     console.error('Demo start failed', err);
