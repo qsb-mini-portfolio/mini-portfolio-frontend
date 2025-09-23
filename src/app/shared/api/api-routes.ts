@@ -19,5 +19,8 @@ export const API_ROUTES = {
   stock: {
     root: '/stock',
     stockBySymbol: (symbol: string) => `/stock/${encodeURIComponent(symbol)}`,
+  },
+  demo: {
+    root: '/demo',
   }
 } as const;
