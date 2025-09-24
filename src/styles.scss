@@ -73,3 +73,13 @@ body { background: var(--bg); color: var(--txt); }
 .p-progressbar { height: 8px; background: #0d1730; border-radius: 999px; border: 1px solid var(--border); }
 .p-progressbar .p-progressbar-value { background: linear-gradient(90deg, #36d399, #2dd4bf); }
 
+.apexcharts-tooltip {
+  color: #000 !important;            /* texte noir */
+}
+.apexcharts-tooltip-title {
+  background: #f1f3f5 !important;    /* bandeau titre gris très clair */
+  color: #000 !important;
+}
+.apexcharts-tooltip-series-group {
+  color: #000 !important;
+}

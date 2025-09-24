@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, inject, computed} from '@angular/core';
+import {Component, ChangeDetectionStrategy, inject, computed, OnInit} from '@angular/core';
 import {DecimalPipe, NgClass} from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -7,8 +7,9 @@ import { DividerModule } from 'primeng/divider';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { AvatarModule } from 'primeng/avatar';
 import { RippleModule } from 'primeng/ripple';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import {ApexOptions, NgApexchartsModule} from 'ng-apexcharts';
 import {DashboardService} from '../portfolio/services/dashboard.service';
+import {ApiDashboardResponse} from '../portfolio/models/dashboard.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -29,7 +30,7 @@ import {DashboardService} from '../portfolio/services/dashboard.service';
   styleUrls: ['./dashboard.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
   private readonly api = inject(DashboardService);
   readonly data = this.api.raw;
   readonly loading = this.api.loading;
@@ -38,54 +39,6 @@ export class Dashboard {
   // KPIs mock
   nav = this.api.netValue;
   perfPct = this.api.performancePct;
-
-  readonly sectorChartData= this.api.sectorChartData;
-
-  // ApexCharts — NAV Over Time (area)
-  areaSeries = [
-    {
-      name: 'NAV',
-      data: [32, 28, 40, 29, 35, 26, 34, 31, 22, 18, 44, 38],
-    },
-  ];
-  areaOptions: any = {
-    chart: { type: 'area', height: 300, toolbar: { show: false }, zoom: { enabled: false } },
-    dataLabels: { enabled: false },
-    stroke: { curve: 'smooth', width: 3 },
-    colors: ['#6c5ce7'],
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.25,
-        opacityTo: 0.02,
-        stops: [0, 80, 100],
-      },
-    },
-    grid: { borderColor: '#243246', strokeDashArray: 3, yaxis: { lines: { show: false } } },
-    xaxis: {
-      categories: [
-        'JAN',
-        'FEB',
-        'MAR',
-        'APR',
-        'MAY',
-        'JUN',
-        'JUL',
-        'AUG',
-        'SEP',
-        'OCT',
-        'NOV',
-        'DEC',
-      ],
-      labels: { style: { colors: '#7e8aa9' } },
-      axisBorder: { show: false },
-      axisTicks: { show: false },
-    },
-    yaxis: { labels: { show: false } },
-    tooltip: { theme: 'dark' },
-    legend: { show: false },
-  };
 
   // ApexCharts — Asset Allocation (donut)
   readonly donutSeries = this.api.sectorDonutSeries;
@@ -99,20 +52,82 @@ export class Dashboard {
     legend: { position: 'bottom' },
   };
 
-  sectors = [
-    { name: 'Technology', v: 25, color: '#5ad1ff' },
-    { name: 'Healthcare', v: 20, color: '#ff7a7a' },
-    { name: 'Financials', v: 18, color: '#ffc267' },
-    { name: 'Industrials', v: 15, color: '#7bd389' },
-    { name: 'Others', v: 22, color: '#8b96b3' },
-  ];
+  readonly top5PerfOptions = computed<ApexOptions>(() => {
+    const raw = this.api.raw();
+    if (!raw || !raw.portfolio?.stocks?.length) return this.getDefaultTop5PerfOptions();
+    return this.buildTop5PerfOptions(raw);
+  });
 
-  currencies = [
-    { code: 'USD', v: 60 },
-    { code: 'EUR', v: 25 },
-    { code: 'GBP', v: 10 },
-    { code: 'JPY', v: 5 },
-  ];
+  private getDefaultTop5PerfOptions(): any {
+    return {
+      chart: { type: 'bar', height: 350, foreColor: '#fff' },
+      plotOptions: {
+        bar: {
+          horizontal: true,
+          borderRadius: 4,
+          colors: {
+            ranges: [
+              { from: -1000, to: 0, color: '#FF6B6B' },
+              { from: 0, to: 1000, color: '#4ECDC4' },
+            ],
+          },
+        },
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (v: number) => `${(v ?? 0).toFixed(2)}%`,
+        style: { colors: ['#fff'] },
+      },
+      xaxis: { categories: [] },
+      yaxis: { labels: { style: { colors: '#fff' } } },
+      legend: { show: false },
+      series: [{ name: 'Performance', data: [] }],
+    };
+  }
+  private buildTop5PerfOptions(resp: ApiDashboardResponse): any {
+    const stocks = resp.portfolio?.stocks ?? [];
+    const items = stocks
+      .filter(s => s?.yield !== null && Number.isFinite(Number(s.yield)))
+      .map(s => ({
+        symbol: s.symbol,
+        name: s.name,
+        perfPct: Number(s.yield) * 100,
+        boughtPrice: s.boughtPrice ?? 0,
+        currentPrice: s.currentPrice ?? 0,
+        volume: s.volume ?? 0,
+      }))
+      .sort((a, b) => b.perfPct - a.perfPct)
+      .slice(0, 5);
+
+    const categories = items.map(i => i.symbol);
+    const data = items.map(i => +i.perfPct.toFixed(2));
+
+    return {
+      chart: { type: 'bar', height: 350, foreColor: '#fff' },
+      plotOptions: {
+        bar: {
+          horizontal: true,
+          borderRadius: 4,
+          colors: {
+            ranges: [
+              { from: -1000, to: 0, color: '#FF6B6B' },
+              { from: 0, to: 1000, color: '#4ECDC4' },
+            ],
+          },
+        },
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (v: number) => `${(v ?? 0).toFixed(2)}%`,
+        style: { colors: ['#fff'] },
+      },
+      xaxis: { categories },
+      // labels NVDA/AAPL… en blanc (axe Y car bar horizontal)
+      yaxis: { labels: { style: { colors: '#fff' } } },
+      legend: { show: false },
+      series: [{ name: 'Performance', data }],
+    };
+  }
 
   ngOnInit() {
     this.api.load();

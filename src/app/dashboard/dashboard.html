@@ -28,7 +28,7 @@
     <!-- Charts row -->
     <section class="section">
       <div class="panel-grid">
-        <p-card class="panel span-full">
+        <p-card class="panel half-width">
           <div class="panel-title">Asset Allocation</div>
           <apx-chart
             class="apex-donut"
@@ -41,6 +41,17 @@
             [plotOptions]="donutOptions.plotOptions"
             [legend]="donutOptions.legend"
           >
+          </apx-chart>
+        </p-card>
+        <p-card class="panel half-width">
+          <apx-chart
+            [series]="top5PerfOptions().series!"
+            [chart]="top5PerfOptions().chart!"
+            [xaxis]="top5PerfOptions().xaxis!"
+            [yaxis]="top5PerfOptions().yaxis!"
+            [plotOptions]="top5PerfOptions().plotOptions!"
+            [dataLabels]="top5PerfOptions().dataLabels!"
+            [legend]="top5PerfOptions().legend!">
           </apx-chart>
         </p-card>
       </div>

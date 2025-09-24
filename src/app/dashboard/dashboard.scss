@@ -44,12 +44,6 @@
 @media (min-width: 640px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { .kpi-grid { gap: 1.5rem; } }
 
-/* Panel grid (charts, lists) */
-.panel-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
-}
 @media (min-width: 960px) { .panel-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1280px) { .panel-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
 
@@ -116,3 +110,13 @@
 /* Page content */
 .content { max-width: 1200px; margin: 1.25rem auto 0; }
 .title { font-size: 32px; font-weight: 800; margin: 1.25rem 0.25rem; letter-spacing: -0.015em; }
+.panel-grid {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.half-width {
+  flex: 1;
+  min-width: 0;
+}
