@@ -111,12 +111,8 @@
 .content { max-width: 1200px; margin: 1.25rem auto 0; }
 .title { font-size: 32px; font-weight: 800; margin: 1.25rem 0.25rem; letter-spacing: -0.015em; }
 .panel-grid {
-  display: flex;
+  display: grid;
   gap: 1rem;
-  width: 100%;
-}
-
-.half-width {
-  flex: 1;
-  min-width: 0;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: stretch;
 }
