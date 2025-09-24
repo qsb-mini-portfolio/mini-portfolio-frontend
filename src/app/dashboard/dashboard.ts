@@ -91,9 +91,9 @@ export class Dashboard {
   readonly donutSeries = this.api.sectorDonutSeries;
   readonly donutLabels = this.api.sectorDonutLabels;
   donutOptions: any = {
-    chart: { type: 'donut', height: 300 },
+    chart: { type: 'donut', height: 300, foreColor: "#fff" },
     dataLabels: { enabled: false },
-    colors: ['#ff6aa3', '#6b74ff', '#7b5cff', '#2a3344'],
+    colors: ['#2374ab', '#231651', '#4dccbd', '#ff8484'],
     stroke: { width: 0 },
     plotOptions: { pie: { donut: { size: '72%' } } },
     legend: { position: 'bottom' },
