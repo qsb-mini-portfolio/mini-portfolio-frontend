@@ -19,6 +19,8 @@ import {StockOption, StocksService} from '../../services/stocks.service';
 import {ImportCsvDialog} from './import-csv-dialog';
 import { UserService } from '../../services/userService';
 import {stockResponse, favoriteStockResponse} from '../../../Interfaces/stockInterface';
+import { UserService } from '../../services/userService';
+import {stockResponse, favoriteStockResponse} from '../../../Interfaces/stockInterface';
 @Component({
   selector: 'app-portfolio-overview',
   standalone: true,
