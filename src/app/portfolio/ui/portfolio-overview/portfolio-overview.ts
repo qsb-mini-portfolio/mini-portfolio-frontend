@@ -17,8 +17,8 @@ import {PortfolioService} from '../../services/portfolio.service';
 import {AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent} from 'primeng/autocomplete';
 import {StockOption, StocksService} from '../../services/stocks.service';
 import {ImportCsvDialog} from './import-csv-dialog';
-import { UserService } from '../../services/userService';
 import {stockResponse, favoriteStockResponse} from '../../../Interfaces/stockInterface';
+import { UserService } from '../../services/userService';
 @Component({
   selector: 'app-portfolio-overview',
   standalone: true,
