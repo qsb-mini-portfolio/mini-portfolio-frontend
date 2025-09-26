@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { UserService } from '../Services/userService';
+import { UserService } from '../portfolio/services/userService';
 import  userResponse  from '../Interfaces/userInterface'
 import { ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
@@ -60,19 +60,14 @@ export class UserPage {
   saveChanges() {
     const newEmail = this.form.value.email;
     if (newEmail && newEmail != ""){
-      console.log(newEmail)
       this.userService.changeEmail(newEmail).subscribe({
         next: (res) => {
           alert("Email changé avec succès !");
         }});
       }
-   
   }
 
   disconnect() {
     this.authService.logout();
   }
-
-
-
 }

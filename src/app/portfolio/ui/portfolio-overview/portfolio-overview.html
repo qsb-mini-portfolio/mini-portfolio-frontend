@@ -16,6 +16,7 @@
         </button>
       </div>
 
+
       <!-- Positions -->
       <p-card class="card">
         <ng-template pTemplate="header"><h2>Positions</h2></ng-template>
@@ -67,7 +68,12 @@
                 <p-sortIcon field="weightPct"></p-sortIcon>
                 <p-column-filter field="weightPct" type="numeric" display="menu"></p-column-filter>
               </th>
+                <th class="text-right" pSortableColumn="favorite">
+                Favorite
+              <p-sortIcon field="weightPct"></p-sortIcon>
+              </th>
             </tr>
+            
           </ng-template>
           <ng-template pTemplate="body" let-p>
             <tr>
@@ -84,6 +90,15 @@
               <td class="text-right">
                 <span class="tab-number">{{ (p.weightPct ?? 0) | percent:'1.0-2' }}</span>
               </td>
+             <td>
+            <button 
+              class="heart-btn" 
+              [class.active]="likedSymbols.has(p.symbol)" 
+              (click)="toggleLike(p)">
+              ❤
+            </button>
+      
+            </td>
             </tr>
           </ng-template>
         </p-table>
