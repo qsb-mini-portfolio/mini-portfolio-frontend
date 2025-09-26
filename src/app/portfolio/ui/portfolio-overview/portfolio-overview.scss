@@ -43,6 +43,24 @@ form.form {
 }
 
 
+.heart-btn {
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: transparent;
+  -webkit-text-stroke: 1.5px white; 
+  transition: transform 0.2s, color 0.3s;
+}
+
+.heart-btn.active {
+  color: white;
+  -webkit-text-stroke: 1.5px white;
+  transform: scale(1.2); 
+}
+
+
+
 /* Table densité & alignements légers */
 :host ::ng-deep .p-datatable tbody > tr > td:first-child { width: 120px; }
 :host ::ng-deep .p-datatable tbody > tr > td:nth-child(2) { max-width: 480px; }

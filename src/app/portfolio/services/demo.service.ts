@@ -4,7 +4,7 @@ import {API_BASE_URL} from '../../core/config/api-base-url.token';
 import {API_ROUTES} from '../../shared/api/api-routes';
 import {Router} from '@angular/router';
 import {AuthService} from '../../auth/auth.service';
-import {UserService} from '../../Services/userService';
+import {UserService} from './userService';
 
 @Injectable({providedIn: 'root'})
 export class DemoService {

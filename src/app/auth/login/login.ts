@@ -8,7 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../auth.service';
-import { UserService } from '../../Services/userService';
+import { UserService } from '../../portfolio/services/userService';
 
 @Component({
   standalone: true,

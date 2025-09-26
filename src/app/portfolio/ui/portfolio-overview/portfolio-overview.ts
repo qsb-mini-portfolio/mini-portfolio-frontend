@@ -17,7 +17,8 @@ import {PortfolioService} from '../../services/portfolio.service';
 import {AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent} from 'primeng/autocomplete';
 import {StockOption, StocksService} from '../../services/stocks.service';
 import {ImportCsvDialog} from './import-csv-dialog';
-
+import { UserService } from '../../services/userService';
+import {stockResponse, favoriteStockResponse} from '../../../Interfaces/stockInterface';
 @Component({
   selector: 'app-portfolio-overview',
   standalone: true,
@@ -30,6 +31,7 @@ export class PortfolioOverview implements OnInit {
   private readonly portfolio = inject(PortfolioService);
   private readonly repo = inject(HttpTransactionsAdapter);
   private readonly fb = inject(FormBuilder);
+  private readonly userService = inject(UserService);
 
   readonly transactions = this.repo.transactions;
   readonly transactionsMutable = computed(() => [...this.transactions()]);
@@ -64,7 +66,7 @@ export class PortfolioOverview implements OnInit {
   async ngOnInit() {
     this.repo.refresh();
     this.portfolio.refresh();
-
+    this.getFavoriteStocks();
     await this.stocks.ensureLoaded();
 
     this.query$
@@ -178,4 +180,32 @@ export class PortfolioOverview implements OnInit {
       this.searching = false;
     }
   }
+  liked = false;
+
+  // GESTION DES STOCKS FAVORIS
+
+  favoriteStocks : stockResponse[] = [];
+  favoriteStocksSymbols : string[] = []
+  likedSymbols: Set<string> = new Set();
+
+getFavoriteStocks() {
+  this.userService.getFavoriteStock().subscribe({
+    next: (response) => {
+      this.favoriteStocksSymbols = response.stocks.map(s => s.symbol);
+      this.likedSymbols = new Set(this.favoriteStocksSymbols);
+    }
+  });
+}
+
+
+toggleLike2(p: any) {
+  if (this.likedSymbols.has(p.symbol)) {
+      this.likedSymbols.delete(p.symbol);
+      this.userService.deleteFavoriteStock(p.symbol).subscribe();
+  } else {
+      this.likedSymbols.add(p.symbol);
+      this.userService.addFavoriteStock(p.symbol).subscribe();
+  }
+}
+
 }
