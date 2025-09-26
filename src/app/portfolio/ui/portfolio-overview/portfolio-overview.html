@@ -24,7 +24,7 @@
 
         <p-table
           #dt
-          [value]="positions()"
+          [value]="filteredStocks"
           [tableStyle]="{'min-width':'800px'}"
           [paginator]="true"
           [rows]="10"
@@ -69,9 +69,8 @@
                 <p-sortIcon field="weightPct"></p-sortIcon>
                 <p-column-filter field="weightPct" type="numeric" display="menu"></p-column-filter>
               </th>
-                <th class="text-right" pSortableColumn="favorite">
+              <th class="text-right" pSortableColumn="favorite" (click)="toggleFavoriteFilter()">
                 Favorite
-              <p-sortIcon field="weightPct"></p-sortIcon>
               </th>
             </tr>
             

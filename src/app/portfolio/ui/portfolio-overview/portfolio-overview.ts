@@ -19,6 +19,9 @@ import {StockOption, StocksService} from '../../services/stocks.service';
 import {ImportCsvDialog} from './import-csv-dialog';
 import {stockResponse, favoriteStockResponse} from '../../../Interfaces/stockInterface';
 import { UserService } from '../../services/userService';
+import { Table } from 'primeng/table';
+
+
 @Component({
   selector: 'app-portfolio-overview',
   standalone: true,
@@ -188,24 +191,35 @@ export class PortfolioOverview implements OnInit {
   favoriteStocksSymbols : string[] = []
   likedSymbols: Set<string> = new Set();
 
-getFavoriteStocks() {
-  this.userService.getFavoriteStock().subscribe({
-    next: (response) => {
-      this.favoriteStocksSymbols = response.stocks.map(s => s.symbol);
-      this.likedSymbols = new Set(this.favoriteStocksSymbols);
-    }
-  });
-}
-
-
-toggleLike(p: any) {
-  if (this.likedSymbols.has(p.symbol)) {
-      this.likedSymbols.delete(p.symbol);
-      this.userService.deleteFavoriteStock(p.symbol).subscribe();
-  } else {
-      this.likedSymbols.add(p.symbol);
-      this.userService.addFavoriteStock(p.symbol).subscribe();
+  getFavoriteStocks() {
+    this.userService.getFavoriteStock().subscribe({
+      next: (response) => {
+        this.favoriteStocksSymbols = response.stocks.map(s => s.symbol);
+        this.likedSymbols = new Set(this.favoriteStocksSymbols);
+      }
+    });
   }
-}
 
+
+  toggleLike(p: any) {
+    if (this.likedSymbols.has(p.symbol)) {
+        this.likedSymbols.delete(p.symbol);
+        this.userService.deleteFavoriteStock(p.symbol).subscribe();
+    } else {
+        this.likedSymbols.add(p.symbol);
+        this.userService.addFavoriteStock(p.symbol).subscribe();
+    }
+  }
+  showOnlyFavorites = false;
+
+  toggleFavoriteFilter() {
+    this.showOnlyFavorites = !this.showOnlyFavorites;
+  }
+
+  get filteredStocks() {
+    const allPositions = this.positions(); 
+    return this.showOnlyFavorites
+      ? allPositions.filter(p => this.likedSymbols.has(p.symbol))
+      : allPositions;
+  }
 }
