@@ -1,5 +1,5 @@
 import { ApiPositionResponse } from "../../portfolio/models"
-import { SectorSlice } from "./SectorSlice";
+import { SectorSlice } from "./sectorSlice";
 
 export interface DashboardResponse {
   currentPrice: number;
