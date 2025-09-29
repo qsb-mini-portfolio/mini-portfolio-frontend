@@ -1,5 +1,4 @@
 import {Component, EventEmitter, inject, Output, signal} from '@angular/core';
-import {HttpTransactionsAdapter} from '../../../portfolio/services';
 import {
   FileSelectEvent,
   FileUploadHandlerEvent,
@@ -9,6 +8,7 @@ import {CommonModule} from '@angular/common';
 import {DialogModule} from 'primeng/dialog';
 import {ButtonModule} from 'primeng/button';
 import {ProgressBarModule} from 'primeng/progressbar';
+import { HttpTransactionsAdapter } from '../../../services/transaction/http-transactions.adapter';
 
 @Component({
   selector: 'app-import-csv-dialog',

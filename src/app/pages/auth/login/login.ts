@@ -8,7 +8,7 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 
-import { UserService } from '../../../portfolio/services/userService';
+import { UserService } from '../../../services/user/userService';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Utils } from '../../../utils/utils';
 

@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { UserService } from '../../portfolio/services/userService';
-import { userResponse }  from '../../Interfaces/userInterface'
+import { UserService } from '../../services/user/userService';
 import { ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CardModule } from 'primeng/card';
@@ -9,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../../services/auth/auth.service';
+import { UserResponse } from '../../models/user/UserResponse';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class UserPage {
   form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.minLength(3)]],
   });
-  user : userResponse | null = null;
+  user : UserResponse | null = null;
   error : string | null = null;
 
   email: string = '';

@@ -1,10 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {computed, effect, inject, Injectable, signal} from '@angular/core';
 import {API_BASE_URL} from '../../core/config/api-base-url.token';
-import {ApiPosition, ApiPositionResponse, UiPosition} from '../models';
 import {API_ROUTES} from '../../utils/api-routes';
 import {catchError, forkJoin, map, of} from 'rxjs';
-import {HttpTransactionsAdapter} from './http-transactions.adapter';
+import {HttpTransactionsAdapter} from '../transaction/http-transactions.adapter';
+import { ApiPositionResponse, UiPosition, ApiPosition } from '../../models/portfolio/position.model';
 
 @Injectable({providedIn: 'root'})
 export class PortfolioService {

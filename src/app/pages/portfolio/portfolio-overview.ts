@@ -12,13 +12,13 @@ import {DatePickerModule} from 'primeng/datepicker';
 import {debounceTime, distinctUntilChanged, map, startWith, Subject, tap} from 'rxjs';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent} from 'primeng/autocomplete';
-import { UserService } from '../../portfolio/services/userService';
-import { stockResponse } from '../../Interfaces/stockInterface';
-import { Side } from '../../portfolio/models';
-import { HttpTransactionsAdapter } from '../../portfolio/services';
-import { PortfolioService } from '../../portfolio/services/portfolio.service';
-import { StocksService, StockOption } from '../../portfolio/services/stocks.service';
+import { UserService } from '../../services/user/userService';
+import { PortfolioService } from '../../services/portfolio/portfolio.service';
+import { StocksService, StockOption } from '../../services/stock/stocks.service';
 import { ImportCsvDialog } from './import-csv/import-csv-dialog';
+import { StockResponse } from '../../models/stock/stockResponse';
+import { Side } from '../../models/transaction/transaction.model';
+import { HttpTransactionsAdapter } from '../../services/transaction/http-transactions.adapter';
 
 
 
@@ -187,7 +187,7 @@ export class PortfolioOverview implements OnInit {
 
   // GESTION DES STOCKS FAVORIS
 
-  favoriteStocks : stockResponse[] = [];
+  favoriteStocks : StockResponse[] = [];
   favoriteStocksSymbols : string[] = []
   likedSymbols: Set<string> = new Set();
 

@@ -15,7 +15,7 @@ import { PercentageOrNonePipe } from '../../utils/percentageOrNonePipe';
 import { PercentageColorPipe } from '../../utils/percentageClassPipe';
 
 import { DashboardResponse } from '../../models/dashboard/dashboardResponse';
-import { ApiPosition } from '../../portfolio/models/position.model';
+import { ApiPosition } from '../../models/portfolio/position.model';
 
 
 @Component({

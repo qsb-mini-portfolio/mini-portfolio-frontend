@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { DemoService } from '../../portfolio/services/demo.service';
+import { DemoService } from '../../services/demo/demo.service';
 
 
 @Component({

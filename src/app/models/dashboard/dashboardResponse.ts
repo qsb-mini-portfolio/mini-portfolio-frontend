@@ -1,4 +1,4 @@
-import { ApiPositionResponse } from "../../portfolio/models"
+import { ApiPositionResponse } from "../portfolio/position.model";
 import { SectorSlice } from "./sectorSlice";
 
 export interface DashboardResponse {

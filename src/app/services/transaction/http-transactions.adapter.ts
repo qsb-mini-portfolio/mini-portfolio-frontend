@@ -1,10 +1,12 @@
 import {TransactionsRepository} from './transactions.repository';
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {ApiTransactionPage, CreateStockRequest, CreateTransactionRequest, Transaction, UiTransaction} from '../models';
 import {API_BASE_URL} from '../../core/config/api-base-url.token';
 import {API_ROUTES} from '../../utils/api-routes';
 import {of, tap, switchMap, catchError, map, throwError, Observable} from 'rxjs';
+import { ApiTransactionPage } from '../../models/transaction/api-transaction.model';
+import { CreateStockRequest, Transaction, CreateTransactionRequest } from '../../models/transaction/transaction.model';
+import { UiTransaction } from '../../models/transaction/ui-transaction.model';
 
 type StockLookupDto = { stockId: string; symbol: string; name?: string };
 export type ImportResult = { detectedRows: number; savedRows: number};
