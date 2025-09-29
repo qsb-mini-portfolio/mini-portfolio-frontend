@@ -19,22 +19,13 @@ export class DemoService {
       .subscribe({
         next: (token: string) => {
           localStorage.setItem('auth_token', token?.trim() ?? '');
+          this.auth.setToken(token?.trim() ?? '')
+          localStorage.setItem('username', "demo");
+          this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           console.error('Demo start failed', err);
         }
       });
-    this.auth.login('demo', 'demoPassword').subscribe(
-      {
-        next: () => {
-          this.userService.getMyData().subscribe({
-            next : (user) => {
-              localStorage.setItem('username',user.username);
-              this.router.navigate(['/dashboard']);
-            }
-          });
-        }
-      }
-    )
   }
 }

@@ -24,16 +24,18 @@ export class AuthService {
     return this.http
       .post(`${this.apiBase}${API_ROUTES.auth.login}`, { username, password }, { responseType: 'text' })
       .pipe(
-        map((token) => normalizeToken(token)),
-        tap((token) => {
-          this.store.setToken(token);
-          this.isAuthenticated.set(true);
-        }),
+        tap((token) => this.setToken(token)),
         catchError((err) => {
           this.isAuthenticated.set(false);
           return throwError(() => err);
         }),
       );
+  }
+
+  setToken(token: string) {
+    const normToken = this.normalizeToken(token);
+    this.store.setToken(token);
+    this.isAuthenticated.set(true);
   }
 
   register(request: RegisterRequest) {
@@ -72,11 +74,11 @@ export class AuthService {
       map(response => !!response.body),
     );
   }
-}
-
-function normalizeToken(raw: string): string {
+  
+  private normalizeToken(raw: string): string {
   return raw
     .trim()
     .replace(/^Bearer\s+/i, '')
     .replace(/^"(.*)"$/, '$1');
-}
+  }
+} 
