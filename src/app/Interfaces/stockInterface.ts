@@ -1,4 +1,4 @@
-export  interface stockResponse {
+export interface stockResponse {
     stockId : string;
     symbol : string;
     name : string;

@@ -1,9 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { API_ROUTES } from '../../shared/api/api-routes';
+import { API_ROUTES } from '../../utils/api-routes';
 import { API_BASE_URL } from '../../core/config/api-base-url.token';
-import  userResponse  from '../../Interfaces/userInterface';
+import { userResponse }  from '../../Interfaces/userInterface';
 import {stockResponse, favoriteStockResponse} from '../../Interfaces/stockInterface';
 
 @Injectable({ providedIn: 'root' })

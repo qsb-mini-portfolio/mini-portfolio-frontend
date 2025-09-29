@@ -1,10 +1,10 @@
-import {Inject, inject, Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {API_BASE_URL} from '../../core/config/api-base-url.token';
-import {API_ROUTES} from '../../shared/api/api-routes';
+import {API_ROUTES} from '../../utils/api-routes';
 import {Router} from '@angular/router';
-import {AuthService} from '../../auth/auth.service';
 import {UserService} from './userService';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Injectable({providedIn: 'root'})
 export class DemoService {

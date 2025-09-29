@@ -1,4 +1,4 @@
-export default interface userResponse {
+export interface userResponse {
     username : string;
     email : string;
 }

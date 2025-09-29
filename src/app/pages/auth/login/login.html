@@ -1,0 +1,53 @@
+<div class="page">
+  <!-- card -->
+  <div class="card-wrapper">
+    <p-card class="glass" [style]="{ maxWidth: '520px' }">
+      <div class="header">
+        <h1>Welcome Back</h1>
+        <p>Login to manage your portfolio</p>
+      </div>
+    
+      <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      
+        <label class="sr-only" for="username">Username</label>
+        <input
+          pInputText
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="Username"
+          class="w-full mb-4"
+        />
+      
+        <label class="sr-only" for="password">Password</label>
+        <p-password
+          id="password"
+          formControlName="password"
+          [feedback]="false"
+          [toggleMask]="true"
+          placeholder="Password"
+          inputStyleClass="w-full"
+          styleClass="w-full mb-3"
+        ></p-password>
+      
+        @if (error()) {
+          <p-message severity="error" class="w-full mb-3">{{ error() || '' }}</p-message>
+        }
+      
+        <div class="actions">
+          <button
+            pButton
+            type="submit"
+            label="Login"
+            class="btn-primary w-full"
+            [loading]="loading()"
+          ></button>
+          <button pButton type="button" label="Create Account" class="btn-ghost w-full" (click)="goRegister()"></button>
+        </div>
+      </form>
+    </p-card>
+  </div>
+
+  <!-- radial mask background -->
+  <div class="mask"></div>
+</div>

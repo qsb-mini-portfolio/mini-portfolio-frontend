@@ -3,7 +3,7 @@ import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ApiTransactionPage, CreateStockRequest, CreateTransactionRequest, Transaction, UiTransaction} from '../models';
 import {API_BASE_URL} from '../../core/config/api-base-url.token';
-import {API_ROUTES} from '../../shared/api/api-routes';
+import {API_ROUTES} from '../../utils/api-routes';
 import {of, tap, switchMap, catchError, map, throwError, Observable} from 'rxjs';
 
 type StockLookupDto = { stockId: string; symbol: string; name?: string };
