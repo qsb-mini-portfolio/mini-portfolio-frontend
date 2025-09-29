@@ -7,9 +7,6 @@
     </div>
 
     <form [formGroup]="form" (ngSubmit)="submit()" class="form">
-      @if (error()) {
-        <p-message severity="error" [text]="error() || ''" class="w-full mb-3"></p-message>
-      }
       <label class="sr-only" for="username">Username</label>
       <input
         pInputText
@@ -31,6 +28,10 @@
         inputStyleClass="w-full"
         styleClass="w-full mb-3"
       ></p-password>
+
+      @if (error()) {
+        <p-message severity="error" class="w-full mb-3">{{ error() || '' }}</p-message>
+      }
 
       <div class="actions">
         <button

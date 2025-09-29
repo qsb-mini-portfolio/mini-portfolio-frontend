@@ -7,6 +7,7 @@
     </div>
 
     <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+
       <label class="sr-only" for="username">Username</label>
       <input
         pInputText
@@ -28,9 +29,9 @@
         styleClass="w-full mb-3"
       ></p-password>
 
-      <div class="forgot">
-        <a href="#" class="muted">Forgot password?</a>
-      </div>
+      @if (error()) {
+        <p-message severity="error" class="w-full mb-3">{{ error() || '' }}</p-message>
+      }
 
       <div class="actions">
         <button

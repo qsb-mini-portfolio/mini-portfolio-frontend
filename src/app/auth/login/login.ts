@@ -9,6 +9,7 @@ import { MessageModule } from 'primeng/message';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../auth.service';
 import { UserService } from '../../portfolio/services/userService';
+import { Utils } from '../../shared/utils/utils';
 
 @Component({
   standalone: true,
@@ -61,7 +62,7 @@ export class Login {
         });
       },
       error: (e) => {
-        this.error.set(e?.error?.message || 'Invalid credentials');
+        this.error.set(Utils.getErrorOrDefault(e, "Invalid Credentials !"));
         this.loading.set(false);
       },
       complete: () => this.loading.set(false),

@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../auth.service';
+import { Utils } from '../../shared/utils/utils';
 
 @Component({
   selector: 'app-register',
@@ -50,10 +51,9 @@ export class Register {
             this.error.set('Registration failed');
           }
         },
-        error: (err) => {
+        error: (e) => {
           this.loading.set(false);
-          const msg = err?.error?.message || err?.message || 'Registration failed';
-          this.error.set(msg);
+          this.error.set(Utils.getErrorOrDefault(e,'Registration failed' ));
         },
       });
   }
