@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
-import { Login } from './auth/login/login';
-import { Dashboard } from './dashboard/dashboard';
-import { UserPage } from './userPage/userPage';
-import { authGuard, authRedirectGuard } from './auth/auth.guard';
-import { Register } from './auth/register/register';
-import {PortfolioOverview} from './portfolio/ui/portfolio-overview/portfolio-overview';
+import { Dashboard } from './pages/dashboard/dashboard';
+import { UserPage } from './pages/user/userPage';
 import { Component } from '@angular/core';
-import {Demo} from './portfolio/demo/demo';
+import { Login } from './pages/auth/login/login';
+import { Register } from './pages/auth/register/register';
+import { authRedirectGuard, authGuard } from './services/auth/auth.guard';
+import { PortfolioOverview } from './pages/portfolio/portfolio-overview';
+import { Demo } from './pages/demo/demo';
 
 @Component({
   selector: 'app-redirect',

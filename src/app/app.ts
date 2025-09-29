@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AppHeader } from './shared/ui/header/header';
+import { AppHeader } from './pages/header/header';
 
 
 @Component({

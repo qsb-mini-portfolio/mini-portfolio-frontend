@@ -1,0 +1,30 @@
+
+import { Router, RouterModule } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import { AuthService } from '../../services/auth/auth.service';
+
+@Component({
+  selector: 'app-header',
+  standalone: true,
+  imports: [RouterModule, ButtonModule],
+  templateUrl: './header.html',
+  styleUrl: './header.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class AppHeader {
+  private router = inject(Router);
+  private auth = inject(AuthService);
+
+  isAuth = this.auth.isAuthenticated;
+
+  userNameLabel: string | null = localStorage.getItem("username")?.replace(/^"|"$/g, '') ?? null;
+
+  go(url: string) {
+    this.router.navigateByUrl(url);
+  }
+
+  logout() {
+    this.auth.logout();
+  }
+}
