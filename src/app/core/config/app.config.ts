@@ -12,7 +12,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
-import { authInterceptor } from '../../auth/auth.interceptor';
+import { authInterceptor } from '../../services/auth/auth.interceptor';
 import { APP_CONFIG, AppConfig } from './app-config.token';
 import { API_BASE_URL } from './api-base-url.token';
 import { firstValueFrom } from 'rxjs';
