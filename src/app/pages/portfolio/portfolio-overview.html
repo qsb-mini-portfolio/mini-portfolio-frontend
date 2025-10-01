@@ -36,38 +36,31 @@
               <th pSortableColumn="symbol">
                 Symbol
               <p-sortIcon field="symbol"></p-sortIcon>
-                <p-columnFilter field="symbol" type="text" display="menu" matchMode="contains"></p-columnFilter>
 
               </th>
               <th pSortableColumn="name">
                 Name
               <p-sortIcon field="name"></p-sortIcon>
-                <p-column-filter field="name" type="text" display="menu" matchMode="contains"></p-column-filter>
               </th>
               <th class="text-right" pSortableColumn="volume">
                 Quantity
                 <p-sortIcon field="volume"></p-sortIcon>
-                <p-column-filter field="volume" type="numeric" display="menu"></p-column-filter>
               </th>
               <th class="text-right" pSortableColumn="boughtPrice">
                 Bought Price
                 <p-sortIcon field="boughtPrice"></p-sortIcon>
-                <p-column-filter field="boughtPrice" type="numeric" display="menu"></p-column-filter>
               </th>
               <th class="text-right" pSortableColumn="currentPrice">
                 Market Value
                 <p-sortIcon field="currentPrice"></p-sortIcon>
-                <p-column-filter field="currentPrice" type="numeric" display="menu"></p-column-filter>
               </th>
               <th class="text-right" pSortableColumn="yieldPct">
                 Performance
               <p-sortIcon field="yieldPct"></p-sortIcon>
-                <p-column-filter field="yieldPct" type="numeric" display="menu"></p-column-filter>
               </th>
               <th class="text-right" pSortableColumn="weightPct">
                 % of Portfolio
                 <p-sortIcon field="weightPct"></p-sortIcon>
-                <p-column-filter field="weightPct" type="numeric" display="menu"></p-column-filter>
               </th>
               <th class="text-right" pSortableColumn="favorite" (click)="toggleFavoriteFilter()">
                 Favorite
