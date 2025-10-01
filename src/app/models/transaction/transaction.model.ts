@@ -20,3 +20,7 @@ export interface CreateStockRequest {
   symbol: string;
   name?: string;
 }
+
+export interface DeleteTransactionResponse{
+  message : string;
+}

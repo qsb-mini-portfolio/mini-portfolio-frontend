@@ -59,7 +59,18 @@ form.form {
   transform: scale(1.2); 
 }
 
+.transactionRow:hover {
+  outline: 2px solid rgb(214, 214, 245);
+  outline-offset: -2px; 
+  cursor : pointer;
+}
 
+:host ::ng-deep .p-dialog{
+  border-radius: 0 ;           
+  border: 1px solid #ffffff ; 
+  background: #0d1117 ;       
+
+}
 
 /* Table densité & alignements légers */
 :host ::ng-deep .p-datatable tbody > tr > td:first-child { width: 120px; }

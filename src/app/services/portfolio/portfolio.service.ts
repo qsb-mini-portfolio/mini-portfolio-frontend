@@ -2,15 +2,19 @@ import {HttpClient} from '@angular/common/http';
 import {computed, effect, inject, Injectable, signal} from '@angular/core';
 import {API_BASE_URL} from '../../core/config/api-base-url.token';
 import {API_ROUTES} from '../../utils/api-routes';
-import {catchError, forkJoin, map, of} from 'rxjs';
+import {catchError, forkJoin, map, Observable, of} from 'rxjs';
 import {HttpTransactionsAdapter} from '../transaction/http-transactions.adapter';
 import { ApiPositionResponse, UiPosition, ApiPosition } from '../../models/portfolio/position.model';
+import {CreateTransactionRequest, DeleteTransactionResponse } from '../../models/transaction/transaction.model';
+import { Utils } from '../../utils/utils';
+
 
 @Injectable({providedIn: 'root'})
 export class PortfolioService {
   private readonly http = inject(HttpClient);
   private readonly base = inject(API_BASE_URL);
   private readonly txRepo = inject(HttpTransactionsAdapter);
+    private apiBase = inject(API_BASE_URL);
 
   private readonly _raw = signal<ApiPositionResponse | null>(null);
   private readonly _loading = signal(false);
@@ -109,5 +113,23 @@ export class PortfolioService {
           })
         }
       )
+  }
+
+  updateTransaction(transactionId: string, price: number, volume: number, date: Date) : Observable<CreateTransactionRequest>{
+    const request = {
+      transactionId: transactionId,
+      price: price,
+      volume: volume,
+      date: Utils.formatDateToIsoShort(date)
+    }
+    return this.http.put<CreateTransactionRequest>(
+      `${this.apiBase}${API_ROUTES.transaction.root}`, request
+    )
+  }
+
+  deleteTransaction(transactionId : string) :  Observable<DeleteTransactionResponse> {
+    return this.http.delete<DeleteTransactionResponse>(
+      `${this.apiBase}${API_ROUTES.transaction.root}/${transactionId}`,
+    )
   }
 }

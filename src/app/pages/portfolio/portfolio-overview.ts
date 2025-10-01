@@ -222,4 +222,58 @@ export class PortfolioOverview implements OnInit {
       ? allPositions.filter(p => this.likedSymbols.has(p.symbol))
       : allPositions;
   }
+
+  // Gestion des transactions 
+
+    readonly transactionForm = this.fb.nonNullable.group(
+    {
+      id : "",
+      date: new Date(),
+      volume: 100,
+      price: 100,
+    }, { validators: [
+        (g) => (g.value.volume ?? 0) > 0 && (g.value.price ?? 0) > 0 ? null : { invalidNumbers: true }
+      ]}
+  );
+  readonly showTransactionDialog = signal(false);
+  openTransactionDialog() {
+    this.showTransactionDialog.set(true);
+  }
+  closeTransactionDialog() {
+    this.showTransactionDialog.set(false);
+  }
+
+  handleRowSelect(event : any){
+    this.showTransactionDialog.set(true)
+    const data = event.data;
+    this.transactionForm.patchValue({
+      id : data.id,
+      date : new Date(data.dateIso),
+      volume : data.volume,
+      price : data.price
+    })
+  }
+
+  submitTransactionForm() {
+    const formValues = this.transactionForm.getRawValue();
+    this.portfolio.updateTransaction(formValues.id, formValues.price, formValues.volume, formValues.date)
+    .subscribe(
+      next => {
+        this.portfolio.refresh();
+        this.repo.refresh();
+        this.showTransactionDialog.set(false);
+      }
+    );
+  }
+
+  deleteTransaction(){
+    const formValues = this.transactionForm.getRawValue();
+    this.portfolio.deleteTransaction(formValues.id).subscribe(
+      next => {
+        this.portfolio.refresh();
+        this.repo.refresh();
+        this.showTransactionDialog.set(false);
+      }
+    );
+  }
 }

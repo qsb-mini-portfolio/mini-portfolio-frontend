@@ -58,8 +58,11 @@ body { background: var(--bg); color: var(--txt); }
 .p-button.btn-primary:hover { background: var(--accent-600); border-color: var(--accent-600); }
 .p-button.btn-ghost { background: transparent; border-color: var(--border); color: var(--txt); }
 .p-button.btn-ghost:hover { background: rgba(255,255,255,0.04); }
+.p-button.btn-delete { background:  rgba(231, 25, 25, 0.896); border-color: var(--border); color: var(--txt);  margin-right: auto; }
+.p-button.btn-delete.p-button:hover {
+  background: rgba(210, 25, 25, 0.82); border-color: rgba(226, 18, 18, 0.82);
+}
 
-/* Data table (PrimeNG) */
 .p-datatable { color: var(--txt); }
 .p-datatable .p-datatable-header { background: var(--card); border: 1px solid var(--border); }
 .p-datatable thead > tr > th { background: var(--card); border-color: var(--border); color: var(--muted); font-weight: 600; }
@@ -67,7 +70,7 @@ body { background: var(--bg); color: var(--txt); }
 .p-datatable .p-datatable-tbody > tr:hover > td { background: #0f1a2d; }
 
 /* Dialog */
-.p-dialog .p-dialog-header, .p-dialog .p-dialog-content, .p-dialog .p-dialog-footer { background: var(--card); color: var(--txt); border-color: var(--border); }
+.p-dialog .p-dialog-header, .p-dialog .p-dialog-content, .p-dialog .p-dialog-footer { background: var(--card); color: var(--txt); border-color: var(--border); border-radius: 5px; }
 
 /* Progress bar */
 .p-progressbar { height: 8px; background: #0d1730; border-radius: 999px; border: 1px solid var(--border); }
@@ -83,3 +86,4 @@ body { background: var(--bg); color: var(--txt); }
 .apexcharts-tooltip-series-group {
   color: #000 !important;
 }
+
