@@ -1,0 +1,14 @@
+:host ::ng-deep .p-fileupload-file-thumbnail{
+  display: none;
+}
+:host ::ng-deep .p-fileupload-file-badge {
+    display : none;
+}
+
+:host ::ng-deep .p-fileupload-file-remove-button {
+  display: none;
+}
+
+:host ::ng-deep .text-sm.text-gray-700 {
+  display: none;
+}
