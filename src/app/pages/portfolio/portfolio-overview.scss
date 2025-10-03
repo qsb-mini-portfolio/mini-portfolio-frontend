@@ -53,6 +53,10 @@ form.form {
   transition: transform 0.2s, color 0.3s;
 }
 
+.heart-btn:hover{
+  transform: scale(1.15);
+}
+
 .heart-btn.active {
   color: white;
   -webkit-text-stroke: 1.5px white;

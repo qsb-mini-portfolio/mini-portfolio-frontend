@@ -55,13 +55,18 @@ body { background: var(--bg); color: var(--txt); }
 
 /* Buttons (optionnel: variantes utilitaires) */
 .p-button.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.p-button.btn-primary:hover { background: var(--accent-600); border-color: var(--accent-600); }
 .p-button.btn-ghost { background: transparent; border-color: var(--border); color: var(--txt); }
 .p-button.btn-ghost:hover { background: rgba(255,255,255,0.04); }
 .p-button.btn-delete { background:  rgba(231, 25, 25, 0.896); border-color: var(--border); color: var(--txt);  margin-right: auto; }
 .p-button.btn-delete.p-button:hover {
   background: rgba(210, 25, 25, 0.82); border-color: rgba(226, 18, 18, 0.82);
 }
+
+.btn-primary:hover{
+  background-color: #148292 !important;
+  border :#000 !important;
+}
+
 
 .p-datatable { color: var(--txt); }
 .p-datatable .p-datatable-header { background: var(--card); border: 1px solid var(--border); }
@@ -180,4 +185,5 @@ body { background: var(--bg); color: var(--txt); }
 .toast-info::before {
   content: "ℹ";
 }
+
 
