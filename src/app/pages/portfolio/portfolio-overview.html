@@ -89,7 +89,6 @@
               (click)="toggleLike(p)">
               ❤
             </button>
-      
             </td>
             </tr>
           </ng-template>
@@ -108,6 +107,7 @@
           [(selection)]="liked"
           selectionMode="single" 
           (onRowSelect)="handleRowSelect($event)"
+          (click)="openTransaction()"
         >
           <ng-template pTemplate="header">
             <tr>
@@ -135,38 +135,7 @@
       </p-card>
 
       <!-- Transaction Dialog -->
-      <p-dialog
-        [visible]="showTransactionDialog()"
-        (visibleChange)="showTransactionDialog.set($event)"
-        header="Update Transaction"
-        [modal]="true"
-        [style]="{width:'520px'}">
-        <form [formGroup]="transactionForm" (ngSubmit)="submitTransactionForm()" class="form">
-          <div class="row">
-            <label>Date</label>
-            <p-datePicker formControlName="date" [showTime]="true" dateFormat="yy-mm-dd"></p-datePicker>
-          </div>
-          <div class="row">
-            <label>Quantity</label>
-            <p-inputNumber formControlName="volume" [min]="1"></p-inputNumber>
-          </div>
-          <div class="row">
-            <label>Price</label>
-            <p-inputNumber formControlName="price" mode="currency" currency="USD" [min]="0.01"></p-inputNumber>
-          </div>
-          <div class="actions">
-              <button pButton type="button"   pButtonLabel="Delete" class="btn-delete" (click)="deleteTransaction()">
-              Delete
-            </button>
-            <button pButton type="button" pButtonLabel="Cancel" class="p-button-text btn-ghost" (click)="closeTransactionDialog()">
-              Cancel
-            </button>
-            <button pButton type="submit" pButtonLabel="Save" pButtonIcon="pi pi-check" class="btn-primary"
-              [disabled]="form.invalid">Save
-            </button>
-          </div>
-        </form>
-      </p-dialog>
+      <app-transaction-dialog #transactionDlg></app-transaction-dialog>
 
       <!-- CSV Dialog -->
       <app-import-csv-dialog #csvDlg (completed)="onCsvImported($event)"></app-import-csv-dialog>

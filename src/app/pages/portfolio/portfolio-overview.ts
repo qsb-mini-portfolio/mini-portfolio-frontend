@@ -16,6 +16,7 @@ import { UserService } from '../../services/user/userService';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
 import { StocksService, StockOption } from '../../services/stock/stocks.service';
 import { ImportCsvDialog } from './import-csv/import-csv-dialog';
+import { TransactionDialog} from './transaction-dialog/transaction-dialog';
 import { StockResponse } from '../../models/stock/stockResponse';
 import { Side } from '../../models/transaction/transaction.model';
 import { HttpTransactionsAdapter } from '../../services/transaction/http-transactions.adapter';
@@ -27,7 +28,7 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-portfolio-overview',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CardModule, TableModule, ButtonModule, TagModule, DialogModule,
-    InputNumberModule, Select, InputNumber, DatePickerModule, AutoComplete, FormsModule, ImportCsvDialog],
+    InputNumberModule, Select, InputNumber, DatePickerModule, AutoComplete, FormsModule, ImportCsvDialog, TransactionDialog],
   templateUrl: './portfolio-overview.html',
   styleUrls: ['./portfolio-overview.scss']
 })
@@ -57,6 +58,11 @@ export class PortfolioOverview implements OnInit {
   private query$ = new Subject<string>();
 
   @ViewChild('csvDlg') csvDlg!: ImportCsvDialog;
+  @ViewChild('transactionDlg') transactionDlg! : TransactionDialog;
+
+  openTransaction(){
+    this.transactionDlg.openTransactionDialog();
+  }
 
   openImport() {
     this.csvDlg.open();
