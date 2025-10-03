@@ -17,6 +17,7 @@ import { APP_CONFIG, AppConfig } from './app-config.token';
 import { API_BASE_URL } from './api-base-url.token';
 import { firstValueFrom } from 'rxjs';
 import { env } from '../../../environments/env';
+import { provideToastr } from 'ngx-toastr';
 
 
 function loadConfig() {
@@ -36,6 +37,11 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimations(),
+     provideToastr({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: false,
+    }),
     providePrimeNG({
       ripple: true,
       theme: {

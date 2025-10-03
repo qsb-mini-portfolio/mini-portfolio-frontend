@@ -9,6 +9,7 @@ import { MessageModule } from 'primeng/message';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserResponse } from '../../models/user/UserResponse';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class UserPage {
   private userService = inject(UserService);
   private cdr = inject(ChangeDetectorRef);
   private authService = inject(AuthService);
+  private toastr = inject(ToastrService);
   form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.minLength(3)]],
   });
@@ -55,17 +57,25 @@ export class UserPage {
     this.showPassword = !this.showPassword;
   }
 
-  saveChanges() {
-    const newEmail = this.form.value.email;
-    if (newEmail && newEmail != ""){
-      this.userService.changeEmail(newEmail).subscribe({
-        next: (res) => {
-          alert("Email changé avec succès !");
-        }});
-      }
-  }
+saveChanges() {
+  const newEmail = this.form.value.email;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-  disconnect() {
+  if (newEmail && emailRegex.test(newEmail)) {
+    this.userService.changeEmail(newEmail).subscribe({
+      next: (res) => {
+        this.toastr.success("Email changé avec succès !", "Succès:");
+      },
+      error: () => {
+        this.toastr.error("Une erreur est survenue", "Erreur:");
+      }
+    });
+  } else {
+    this.toastr.warning("Veuillez entrer une adresse email valide", "Attention:");
+  }
+}
+
+disconnect() {
     this.authService.logout();
   }
 }

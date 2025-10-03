@@ -19,6 +19,7 @@ import { ImportCsvDialog } from './import-csv/import-csv-dialog';
 import { StockResponse } from '../../models/stock/stockResponse';
 import { Side } from '../../models/transaction/transaction.model';
 import { HttpTransactionsAdapter } from '../../services/transaction/http-transactions.adapter';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -35,6 +36,7 @@ export class PortfolioOverview implements OnInit {
   private readonly repo = inject(HttpTransactionsAdapter);
   private readonly fb = inject(FormBuilder);
   private readonly userService = inject(UserService);
+  private toastr = inject(ToastrService);
 
   readonly transactions = this.repo.transactions;
   readonly transactionsMutable = computed(() => [...this.transactions()]);
@@ -123,7 +125,7 @@ export class PortfolioOverview implements OnInit {
       volume: v.volume,
       price: v.price
     });
-    console.log("Adding transaction: ", v, "")
+    this.toastr.success("Transaction ajoutée !", "Succès:");
     this.closeDialog();
     this.portfolio.refresh();
   }

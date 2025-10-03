@@ -87,3 +87,97 @@ body { background: var(--bg); color: var(--txt); }
   color: #000 !important;
 }
 
+
+
+
+
+// CSS Pouir les Toasts
+
+@keyframes toast-in {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(130%);
+  }
+}
+#toast-container {
+  position: fixed;
+  top: 5rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+}
+
+#toast-container > div {
+  width: auto ;
+  min-width: 20rem ;
+  max-width: 25rem;
+  padding: 14px 18px ;
+  border-radius: 12px ;
+  font-size: 15px ;
+  font-weight: 500 ;
+  display: flex ;
+  align-items: center ;
+  gap: 10px ;
+  animation: toast-in 0.5s ease, toast-out 0.5s ease 2.5s forwards;
+}
+
+.toast-success {
+  background: linear-gradient(135deg, #28a745, #218838) ;
+  color: #fff ;
+  border : 2px solid;
+  border-color: #15fa4e;
+}
+.toast-success::before {
+  content: "✔";
+}
+
+.toast-error {
+  background: linear-gradient(135deg, #dc3545, #b02a37) ;
+  color: #fff ;
+  border : 2px solid;
+  border-color: #fa1515;
+}
+.toast-error::before {
+  content: "✖";
+}
+
+.toast-warning {
+  background-color: #efd6a5;  
+  border : 2px solid;
+  border-color: #facc15;
+  color: #92400e;
+}
+.toast-warning::before {
+  content: "⚠";
+}
+
+.toast-info {
+  background: linear-gradient(135deg, #17a2b8, #117a8b) ;
+  color: #fff ;
+  border : 2px solid;
+  border-color: #15bdfa;
+}
+.toast-info::before {
+  content: "ℹ";
+}
+
