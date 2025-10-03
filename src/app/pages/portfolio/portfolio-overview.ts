@@ -264,6 +264,7 @@ export class PortfolioOverview implements OnInit {
         this.portfolio.refresh();
         this.repo.refresh();
         this.showTransactionDialog.set(false);
+        this.toastr.success("Transaction modifiée !", "Succès:");
       }
     );
   }
@@ -275,6 +276,7 @@ export class PortfolioOverview implements OnInit {
         this.portfolio.refresh();
         this.repo.refresh();
         this.showTransactionDialog.set(false);
+        this.toastr.success("Transaction supprimée !", "Succès:");
       }
     );
   }
