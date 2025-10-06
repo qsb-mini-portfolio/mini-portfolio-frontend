@@ -58,7 +58,8 @@ export class UserPage {
   }
 
 saveChanges() {
-  const newEmail = this.form.value.email;
+  let newEmail = this.form.value.email;
+  if (!newEmail) { newEmail = this.user?.email;}
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
   if (newEmail && emailRegex.test(newEmail)) {
