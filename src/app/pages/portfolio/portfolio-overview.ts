@@ -198,22 +198,4 @@ export class PortfolioOverview implements OnInit {
         (g) => (g.value.volume ?? 0) > 0 && (g.value.price ?? 0) > 0 ? null : { invalidNumbers: true }
       ]}
   );
-  readonly showTransactionDialog = signal(false);
-  openTransactionDialog() {
-    this.showTransactionDialog.set(true);
-  }
-  closeTransactionDialog() {
-    this.showTransactionDialog.set(false);
-  }
-
-  handleRowSelect(event : any){
-    this.showTransactionDialog.set(true)
-    const data = event.data;
-    this.transactionForm.patchValue({
-      id : data.id,
-      date : new Date(data.dateIso),
-      volume : data.volume,
-      price : data.price
-    })
-  }
 }
