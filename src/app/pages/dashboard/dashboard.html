@@ -45,11 +45,25 @@
                 [series]="donutSeries()!"
                 [labels]="donutLabels()!"
                 [chart]="{ type: 'donut', height: 300, foreColor: '#fff' }"
-                [colors]="['#2374ab', '#231651', '#4dccbd', '#ff8484']"
-                [dataLabels]="{ enabled: false }"
+                [colors]="[ '#2374ab', '#231651', '#4dccbd', '#ff8484', '#f5b700', '#9b5de5', '#00bbf9', '#fee440', '#ff006e' ]"
+                [dataLabels]="{ enabled: false, style: { colors: ['#ffffff'] } }"
                 [stroke]="{ width: 0 }"
-                [plotOptions]="{ pie: { donut: { size: '72%' } } }"
-                [legend]="{ position: 'bottom' }">
+                [plotOptions]="
+                {
+                    pie: {
+                      donut: {
+                        size: '72%',
+                        labels: {
+                          show: true,
+                          value: { color: '#ffffff' },
+                          name: { color: '#ffffff' },
+                          total: { color: '#ffffff' }
+                        }
+                      }
+                    }
+                  }"
+                [legend]="{ position: 'bottom', labels: { colors: '#ffffff' } }"
+                [tooltip]="tooltipOptions">
               </apx-chart>
             }
             @else {

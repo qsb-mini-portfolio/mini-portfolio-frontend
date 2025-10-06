@@ -98,6 +98,29 @@ export class Dashboard {
       series: [{ name: 'Performance', data }],
     };
   }
+
+  public tooltipOptions: any = {
+    theme: 'dark',
+    style: { fontSize: '14px' },
+    custom: (opts: any) => {
+      const label = opts?.w?.globals?.labels?.[opts.seriesIndex] ?? 'Unknown';
+      const value = opts?.series?.[opts.seriesIndex] ?? 0;
+      return `
+        <div style="
+          color: #ffffff !important;
+          background: rgba(0,0,0,0.85) !important;
+          padding: 8px 10px;
+          border-radius: 6px;
+          font-size: 14px;
+          line-height: 1.2;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        ">
+          <div style="font-weight:600; margin-bottom:4px;">${label}</div>
+          <div>${value}</div>
+        </div>
+      `;
+    }
+  };
 }
 
 
