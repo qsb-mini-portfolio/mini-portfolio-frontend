@@ -67,7 +67,6 @@ body { background: var(--bg); color: var(--txt); }
   border :#000 !important;
 }
 
-
 .p-datatable { color: var(--txt); }
 .p-datatable .p-datatable-header { background: var(--card); border: 1px solid var(--border); }
 .p-datatable thead > tr > th { background: var(--card); border-color: var(--border); color: var(--muted); font-weight: 600; }
@@ -144,6 +143,7 @@ body { background: var(--bg); color: var(--txt); }
   align-items: center ;
   gap: 10px ;
   animation: toast-in 0.5s ease, toast-out 0.5s ease 2.5s forwards;
+  margin-bottom: 0.5rem;
 }
 
 .toast-success {
