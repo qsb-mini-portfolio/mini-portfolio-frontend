@@ -84,8 +84,8 @@ export class PortfolioOverview implements OnInit {
     this.importCsvDialog.open();
   }
 
-  openTransaction(event: any) {
-    this.transactionDialog.open(event.data as Transaction);
+  openTransaction(transaction: Transaction) {
+    this.transactionDialog.open(transaction);
   }
   
   refresh() {

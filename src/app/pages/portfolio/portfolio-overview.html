@@ -106,10 +106,7 @@
           [paginator]="true"
           [rows]="10"
           [lazy]="true"
-          (onLazyLoad)="onPageChange($event)"
-          [(selection)]="liked"
-          selectionMode="single" 
-          (onRowSelect)="openTransaction($event)">
+          (onLazyLoad)="onPageChange($event)">
           <ng-template pTemplate="header">
             <tr>
               <th>Date</th>
@@ -121,7 +118,7 @@
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-transaction>
-            <tr [pSelectableRow]="transaction" class="transactionRow">
+            <tr (click)="openTransaction(transaction)" class="transactionRow">
               <td><span class="tab-number">{{ transaction.date | dateOrNone }}</span></td>
               <td><span class="instrument-symbol">{{ transaction.stock.symbol }}</span></td>
               <td>

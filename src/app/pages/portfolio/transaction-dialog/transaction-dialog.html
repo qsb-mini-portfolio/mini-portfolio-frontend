@@ -2,9 +2,9 @@
   [(visible)]="visible"
   header="Update Transaction"
   [modal]="true"
+  [draggable]="false"
   [focusOnShow]="false"
-  [style]="{width:'520px'}"
-  [closable]="false">
+  [style]="{width:'520px'}">
 
   <form [formGroup]="transactionGroup" (ngSubmit)="submit()" class="form" id="transactionForm">
     <div class="row">
