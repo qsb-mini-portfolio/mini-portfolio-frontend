@@ -30,7 +30,7 @@
           [rows]="10"
           [sortMode]="'multiple'"
           [globalFilterFields]="['symbol','name','volume','boughtPrice','currentPrice','yieldPct','weightPct']"
-        >
+          [loading]="portfolioLoading()">
           <ng-template pTemplate="header">
             <tr>
               <th pSortableColumn="symbol">
@@ -106,7 +106,8 @@
           [paginator]="true"
           [rows]="10"
           [lazy]="true"
-          (onLazyLoad)="onPageChange($event)">
+          (onLazyLoad)="onPageChange($event)"
+          [loading]="transactionLoading()">
           <ng-template pTemplate="header">
             <tr>
               <th>Date</th>

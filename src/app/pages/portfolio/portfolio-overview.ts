@@ -1,18 +1,18 @@
-import {Component, computed, inject, signal, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
-import {CardModule} from 'primeng/card';
-import {TableModule} from 'primeng/table';
-import {ButtonModule} from 'primeng/button';
-import {TagModule} from 'primeng/tag';
-import {DialogModule} from 'primeng/dialog';
-import { InputNumberModule} from 'primeng/inputnumber';
-import {DatePickerModule} from 'primeng/datepicker';
+import { Component, inject, signal, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { CardModule } from 'primeng/card';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { DialogModule } from 'primeng/dialog';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DatePickerModule } from 'primeng/datepicker';
 import { UserService } from '../../services/user/userService';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
 import { StocksService } from '../../services/stock/stocks.service';
 import { ImportCsvDialog } from './import-csv/import-csv-dialog';
-import { TransactionDialog} from './transaction-dialog/transaction-dialog';
+import { TransactionDialog } from './transaction-dialog/transaction-dialog';
 import { StockResponse } from '../../models/stock/stockResponse';
 import { ToastrService } from 'ngx-toastr';
 import { AddTransactionDialog } from './add-transaction-dialog/add-transaction-dialog';
@@ -67,6 +67,8 @@ export class PortfolioOverview implements OnInit {
   transactions = signal<Pagination<Transaction>>(Utils.emptyPagination<Transaction>());
   portfolio = signal<Portfolio | undefined>(undefined);
   positions = signal<Position[]>([]);
+  transactionLoading = signal<boolean>(false);
+  portfolioLoading = signal<boolean>(false);
 
   private readonly stocks = inject(StocksService);
 
@@ -121,17 +123,23 @@ export class PortfolioOverview implements OnInit {
   }
 
   loadTransaction() {
+    this.transactionLoading.set(true);
     this.transactionService.loadTransaction(this.currentPage, 10).subscribe({
-      next:(resp) => this.transactions.set(resp),
+      next:(resp) => {
+        this.transactions.set(resp);
+        this.transactionLoading.set(false);
+      },
       error:(err) => console.error('Unable to load the transactions')
     })
   }
 
   loadPortfolio() {
+    this.portfolioLoading.set(true);
     this.portfolioService.loadPortfolio().subscribe({
       next:(resp) => { 
-        this.portfolio.set(resp),
+        this.portfolio.set(resp);
         this.positions.set(resp.stocks);
+        this.portfolioLoading.set(false);
       },
       error:(err) => console.error('Unable to load the portfolio')
     })
