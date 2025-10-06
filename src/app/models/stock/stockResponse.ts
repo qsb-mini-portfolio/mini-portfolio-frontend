@@ -3,5 +3,5 @@ export interface StockResponse {
     symbol : string;
     name : string;
     type : string;
-    price : Float32Array;
+    price : number;
 }

@@ -1,8 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, signal} from '@angular/core';
 import {API_BASE_URL} from '../../core/config/api-base-url.token';
-import {firstValueFrom, Observable, of} from 'rxjs';
+import {firstValueFrom, map, Observable, of} from 'rxjs';
 import {API_ROUTES} from '../../utils/api-routes';
+import { StockResponse } from '../../models/stock/stockResponse';
+import { Pagination } from '../../models/pagination';
 
 export interface StockOption {
   stockId: string;
@@ -79,5 +81,19 @@ export class StocksService {
 
     return [...starts, ...contains].slice(0, limit);
 
+  }
+
+  loadStocks(): Observable<StockResponse[]> {
+    return this.http.get<Pagination<StockResponse>>(`${this.base}${API_ROUTES.stock.root}`).pipe(
+      map(resp => resp.items)
+    )
+  }
+
+  createStock(symbol: string, name: string): Observable<StockResponse> {
+    const body = {
+      symbol: symbol.toUpperCase().trim(),
+      name: name.trim()
+    }
+    return this.http.post<StockResponse>(`${this.base}${API_ROUTES.stock.root}`, body);
   }
 }

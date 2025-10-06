@@ -75,7 +75,9 @@ body { background: var(--bg); color: var(--txt); }
 .p-datatable .p-datatable-tbody > tr:hover > td { background: #0f1a2d; }
 
 /* Dialog */
-.p-dialog .p-dialog-header, .p-dialog .p-dialog-content, .p-dialog .p-dialog-footer { background: var(--card); color: var(--txt); border-color: var(--border); border-radius: 5px; }
+.p-dialog .p-dialog-header { background: var(--card); color: var(--txt); border-color: var(--border); border-top-left-radius: 12px; border-top-right-radius: 12px; } 
+.p-dialog .p-dialog-content { background: var(--card); color: var(--txt); border-color: var(--border); height: 100%; }
+.p-dialog .p-dialog-footer { background: var(--card); color: var(--txt); border-color: var(--border); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
 
 /* Progress bar */
 .p-progressbar { height: 8px; background: #0d1730; border-radius: 999px; border: 1px solid var(--border); }

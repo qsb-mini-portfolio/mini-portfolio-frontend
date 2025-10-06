@@ -1,34 +1,37 @@
 <p-dialog
-  [(visible)]="isVisible"
+  [(visible)]="visible"
   header="Import CSV – Trade Republic"
   [modal]="true"
   [draggable]="false"
   [style]="{ width: '520px' }"
-  (onHide)="onClose()"
 >
   <ng-template pTemplate="content">
     <div class="space-y-3">
       <p class="text-sm text-gray-600">
-        Upload the CSV exactly as exported from Trade Republic. We’ll parse it server-side.
+        Upload the CSV exactly as exported from Trade Republic. We'll parse it server-side.
       </p>
 
       <p-fileupload name="file" mode="advanced" [auto]="false"
-                    maxFileSize="5000000" accept=".csv"
-                    [chooseLabel]="'Choose CSV'" [uploadLabel]="'Import'"
-                    [cancelLabel]="'Clear'" [multiple]="false"
-                    [customUpload]="true"
-                    (onSelect)="onSelect($event)"
-                    (onClear)="onClear()"
-                    (uploadHandler)="onUpload($event)"
-                    [disabled]="loading()">
+        maxFileSize="5000000" accept=".csv"
+        [chooseLabel]="'Choose CSV'" [uploadLabel]="'Import'"
+        [cancelLabel]="'Clear'" [multiple]="false"
+        [customUpload]="true"
+        (onSelect)="onSelect($event)"
+        (onClear)="onClear()"
+        (uploadHandler)="onUpload($event)"
+        [disabled]="loading()">
       </p-fileupload>
 
-      <div *ngIf="selectedFile()" class="text-sm text-gray-700">
-        Selected: <strong>{{ selectedFile()?.name }}</strong>
-        <span class="text-gray-500">({{ selectedFile()?.size | number }} bytes)</span>
-      </div>
-
-      <p-progressBar *ngIf="loading()" mode="indeterminate" styleClass="w-full"></p-progressBar>
+      @if (selectedFile()) {
+        <div class="text-sm text-gray-700">
+          Selected: <strong>{{ selectedFile()?.name }}</strong>
+          <span class="text-gray-500">({{ selectedFile()?.size | number }} bytes)</span>
+        </div>
+      }
+      
+      @if (loading()) {
+        <p-progressBar mode="indeterminate" class="w-full"></p-progressBar>
+      }
     </div>
   </ng-template>
 

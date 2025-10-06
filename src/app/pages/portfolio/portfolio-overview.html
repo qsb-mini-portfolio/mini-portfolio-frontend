@@ -10,7 +10,7 @@
           <i class="pi pi-table"></i>
           <span class="ml-2">Import CSV</span>
         </button>
-        <button pButton class="btn-primary" (click)="openDialog()">
+        <button pButton class="btn-primary" (click)="openAddTransaction()">
           <i class="pi pi-plus"></i>
           <span class="ml-2">Add transaction</span>
         </button>
@@ -67,26 +67,26 @@
               </th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-p>
+          <ng-template pTemplate="body" let-position>
             <tr>
-              <td><span class="instrument-symbol">{{ p.symbol }}</span></td>
-              <td><span class="instrument-name">{{ p.name || p.symbol }}</span></td>
-              <td class="text-right"><span class="tab-number">{{ p.volume }}</span></td>
-              <td class="text-right"><span class="tab-number">{{ (p.boughtPrice || 0) | currency: 'USD' }}</span></td>
+              <td><span class="instrument-symbol">{{ position.symbol }}</span></td>
+              <td><span class="instrument-name">{{ position.name }}</span></td>
+              <td class="text-right"><span class="tab-number">{{ position.volume }}</span></td>
+              <td class="text-right"><span class="tab-number">{{ position.boughtPrice | currencyOrNone }}</span></td>
               <td class="text-right">
-                <span class="tab-number">{{ (+p.currentPrice || 0) | currency:'USD' }}</span>
+                <span class="tab-number">{{ position.currentPrice | currencyOrNone  }}</span>
               </td>
               <td class="text-right">
-                <span class="tab-number"><p-tag [severity]="tagPerformance(p.yieldPct)" [value]="formatYield(p.yieldPct)"></p-tag></span>
+                <span class="tab-number"><p-tag [severity]="position.yield | transactionSeverity" [value]="position.yield | percentageOrNone"></p-tag></span>
               </td>
               <td class="text-right">
-                <span class="tab-number">{{ (p.weightPct ?? 0) | percent:'1.0-2' }}</span>
+                <span class="tab-number">{{ position.part | percentageOrNone }}</span>
               </td>
              <td>
             <button 
               class="heart-btn" 
-              [class.active]="likedSymbols.has(p.symbol)" 
-              (click)="toggleLike(p)">
+              [class.active]="likedSymbols.has(position.symbol)" 
+              (click)="toggleLike(position)">
               ❤
             </button>
             </td>
@@ -100,15 +100,16 @@
         <ng-template pTemplate="header"><h2>Transactions</h2></ng-template>
         <p-table
           class="transactions-table"
-          [value]="transactionsMutable()"
+          [value]="transactions().items"
+          [totalRecords]="transactions().totalElements"
           [tableStyle]="{'min-width':'800px'}"
           [paginator]="true"
           [rows]="10"
+          [lazy]="true"
+          (onLazyLoad)="onPageChange($event)"
           [(selection)]="liked"
           selectionMode="single" 
-          (onRowSelect)="handleRowSelect($event)"
-          (click)="openTransaction()"
-        >
+          (onRowSelect)="openTransaction($event)">
           <ng-template pTemplate="header">
             <tr>
               <th>Date</th>
@@ -119,101 +120,24 @@
               <th class="text-right">Amount</th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-t>
-            <tr [pSelectableRow]="t" class="transactionRow">
-              <td><span class="tab-number">{{ t.dateIso }}</span></td>
-              <td><span class="instrument-symbol">{{ t.symbol }}</span></td>
+          <ng-template pTemplate="body" let-transaction>
+            <tr [pSelectableRow]="transaction" class="transactionRow">
+              <td><span class="tab-number">{{ transaction.date | dateOrNone }}</span></td>
+              <td><span class="instrument-symbol">{{ transaction.stock.symbol }}</span></td>
               <td>
-                <p-tag [severity]="tagSeverity(t.side)" [value]="t.side"></p-tag>
+                <p-tag [severity]="transaction.volume | transactionSeverity" [value]="transaction.volume > 0 ? 'BUY' : 'SELL'"></p-tag>
               </td>
-              <td class="text-right"><span class="tab-number">{{ t.volume }}</span></td>
-              <td class="text-right"><span class="tab-number">{{ t.price | currency:'USD' }}</span></td>
-              <td class="text-right"><span class="tab-number">{{ (t.volume * t.price) | currency:'USD' }}</span></td>
+              <td class="text-right"><span class="tab-number">{{ transaction.volume| abs }}</span></td>
+              <td class="text-right"><span class="tab-number">{{ transaction.price | currencyOrNone }}</span></td>
+              <td class="text-right"><span class="tab-number">{{ ((transaction.volume | abs) * transaction.price) | currencyOrNone }}</span></td>
             </tr>
           </ng-template>
         </p-table>
       </p-card>
 
-      <!-- Transaction Dialog -->
-      <app-transaction-dialog #transactionDlg></app-transaction-dialog>
-
-      <!-- CSV Dialog -->
-      <app-import-csv-dialog #csvDlg (completed)="onCsvImported($event)"></app-import-csv-dialog>
-
-      <!-- Dialog -->
-      <p-dialog
-        [visible]="showDialog()"
-        (visibleChange)="showDialog.set($event)"
-        header="Add Transaction"
-        [modal]="true"
-        [style]="{width:'520px'}">
-        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
-          <div class="row">
-            <label>Date</label>
-            <p-datePicker formControlName="date" [showTime]="true" dateFormat="yy-mm-dd"></p-datePicker>
-          </div>
-          <div class="row">
-            <label>Instrument</label>
-            <p-autoComplete
-            formControlName="symbol"
-            [suggestions]="suggestions"
-            (completeMethod)="onSearch($event)"
-            (onSelect)="onPick($event)"
-            [dropdown]="true"
-            [minlength]="0"
-            [delay]="0"
-            inputId="instrument-ac"
-            placeholder="Type a symbol or name"
-            class="w-full">
-
-              @if (searching) {
-                <i class="pi pi-spinner pi-spin absolute right-2 top-1/2 -translate-y-1/2 opacity-70"></i>
-              }
-              <ng-template let-opt pTemplate="item">
-                <div class="flex items-center gap-2">
-                  <span class="font-semibold">{{ opt.symbol }}</span>
-                  <span class="text-muted"> {{ opt.name }}</span>
-                </div>
-              </ng-template>
-
-              <ng-template pTemplate="footer">
-                @if (canAdd()) {
-                  <button pButton type="button" class="w-full" (click)="createFromQuery()">
-                    <i class="pi pi-plus mr-2"></i>
-                    <span>Add "{{ lastQuery }}"</span>
-                  </button>
-                }
-
-              </ng-template>
-
-            </p-autoComplete>
-          </div>
-          <div class="row">
-            <label>Side</label>
-            <p-select formControlName="side"
-                      [options]="[{label:'BUY',value:'BUY'},{label:'SELL',value:'SELL'}]"></p-select>
-          </div>
-          <div class="row">
-            <label>Quantity</label>
-            <p-inputNumber formControlName="volume" [min]="1"></p-inputNumber>
-          </div>
-          <div class="row">
-            <label>Price</label>
-            <p-inputNumber formControlName="price" mode="currency" currency="USD" [min]="0.01"></p-inputNumber>
-          </div>
-
-          <div class="amount">Amount: <b>{{ amount() | currency:'USD' }}</b></div>
-
-          <div class="actions">
-            <button pButton type="button" pButtonLabel="Cancel" class="p-button-text btn-ghost" (click)="closeDialog()">
-              Cancel
-            </button>
-            <button pButton type="submit" pButtonLabel="Save" pButtonIcon="pi pi-check" class="btn-primary"
-                    [disabled]="form.invalid">Save
-            </button>
-          </div>
-        </form>
-      </p-dialog>
+      <app-transaction-dialog #transactionDialog (deleteComplete)="onDeleteTransaction()" (updateComplete)="onUpdateTransaction()"></app-transaction-dialog>
+      <add-transaction-dialog #addTransactionDialog (completed)="onTransactionCreated()"></add-transaction-dialog>
+      <app-import-csv-dialog #importCsvDialog (completed)="onCSVImported()"></app-import-csv-dialog>
     </div>
   </div>
 </div>

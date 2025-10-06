@@ -6,191 +6,146 @@ import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
 import {TagModule} from 'primeng/tag';
 import {DialogModule} from 'primeng/dialog';
-import {InputNumber, InputNumberModule} from 'primeng/inputnumber';
-import {Select} from 'primeng/select';
+import { InputNumberModule} from 'primeng/inputnumber';
 import {DatePickerModule} from 'primeng/datepicker';
-import {debounceTime, distinctUntilChanged, map, startWith, Subject, tap} from 'rxjs';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent} from 'primeng/autocomplete';
 import { UserService } from '../../services/user/userService';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
-import { StocksService, StockOption } from '../../services/stock/stocks.service';
+import { StocksService } from '../../services/stock/stocks.service';
 import { ImportCsvDialog } from './import-csv/import-csv-dialog';
 import { TransactionDialog} from './transaction-dialog/transaction-dialog';
 import { StockResponse } from '../../models/stock/stockResponse';
-import { Side } from '../../models/transaction/transaction.model';
-import { HttpTransactionsAdapter } from '../../services/transaction/http-transactions.adapter';
 import { ToastrService } from 'ngx-toastr';
+import { AddTransactionDialog } from './add-transaction-dialog/add-transaction-dialog';
+import { Pagination } from '../../models/pagination';
+import { Transaction } from '../../models/transaction/transaction';
+import { Utils } from '../../utils/utils';
+import { TransactionService } from '../../services/transaction/transaction.service';
+import { TransactionSeverityPipe } from "../../utils/pipe/transactionBuyPipe";
+import { AbsPipe } from "../../utils/pipe/absPipe";
+import { DateOrNonePipe } from "../../utils/pipe/dateOrNonePipe";
+import { Portfolio } from '../../models/portfolio/portfolio.model';
+import { Position } from '../../models/portfolio/position.model';
+import { CurrencyOrNonePipe } from "../../utils/pipe/currencyOrNonePipe";
+import { PercentageOrNonePipe } from "../../utils/pipe/percentageOrNonePipe";
 
 
 
 @Component({
   selector: 'app-portfolio-overview',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardModule, TableModule, ButtonModule, TagModule, DialogModule,
-    InputNumberModule, Select, InputNumber, DatePickerModule, AutoComplete, FormsModule, ImportCsvDialog, TransactionDialog],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    CardModule,
+    TableModule,
+    ButtonModule,
+    TagModule,
+    DialogModule,
+    InputNumberModule,
+    DatePickerModule,
+    FormsModule,
+    ImportCsvDialog,
+    AddTransactionDialog,
+    TransactionDialog,
+    TransactionSeverityPipe,
+    AbsPipe,
+    DateOrNonePipe,
+    CurrencyOrNonePipe,
+    PercentageOrNonePipe
+],
   templateUrl: './portfolio-overview.html',
   styleUrls: ['./portfolio-overview.scss']
 })
 export class PortfolioOverview implements OnInit {
-  private readonly portfolio = inject(PortfolioService);
-  private readonly repo = inject(HttpTransactionsAdapter);
+  private readonly portfolioService = inject(PortfolioService);
   private readonly fb = inject(FormBuilder);
   private readonly userService = inject(UserService);
-  private toastr = inject(ToastrService);
 
-  readonly transactions = this.repo.transactions;
-  readonly transactionsMutable = computed(() => [...this.transactions()]);
+  private toastr = inject(ToastrService);
+  private readonly transactionService = inject(TransactionService);
+
+  transactions = signal<Pagination<Transaction>>(Utils.emptyPagination<Transaction>());
+  portfolio = signal<Portfolio | undefined>(undefined);
+  positions = signal<Position[]>([]);
 
   private readonly stocks = inject(StocksService);
 
-  positions = this.portfolio.positions;
-  loading = this.portfolio.loading;
-  error = this.portfolio.error;
+  private currentPage = 0;
 
-  readonly showDialog = signal(false);
+  @ViewChild('importCsvDialog') importCsvDialog!: ImportCsvDialog;
+  @ViewChild('transactionDialog') transactionDialog! : TransactionDialog;
+  @ViewChild('addTransactionDialog') addTransactionDialog!: AddTransactionDialog;
 
-  symbolInput = '';
-  suggestions: StockOption[] = [];
-  lastQuery = '';
-  searching = false;
-
-  private query$ = new Subject<string>();
-
-  @ViewChild('csvDlg') csvDlg!: ImportCsvDialog;
-  @ViewChild('transactionDlg') transactionDlg! : TransactionDialog;
-
-  openTransaction(){
-    this.transactionDlg.openTransactionDialog();
+  openAddTransaction() {
+    this.addTransactionDialog.open();
   }
 
   openImport() {
-    this.csvDlg.open();
+    this.importCsvDialog.open();
   }
 
-  onCsvImported(_: {detectedRows: number; savedRows: number}) {
-    this.repo.refresh();
+  openTransaction(event: any) {
+    this.transactionDialog.open(event.data as Transaction);
+  }
+  
+  refresh() {
+    this.loadTransaction();
+    this.loadPortfolio();
+  }
 
-    this.portfolio.refresh();
+  onCSVImported() {
+    this.toastr.success("CSV Importé !", "Succès:");
+    this.refresh();
+  }
+
+  onTransactionCreated() {
+    this.toastr.success("Transaction créée !", "Succès:");
+    this.refresh();
+  }
+
+  onDeleteTransaction() {
+    this.toastr.success("Transaction supprimée !", "Succès:");
+    this.refresh();
+  }
+
+  onUpdateTransaction() {
+    this.toastr.success("Transaction modifiée !", "Succès:");
+    this.refresh();
   }
 
   async ngOnInit() {
-    this.repo.refresh();
-    this.portfolio.refresh();
+    this.loadTransaction();
+    this.loadPortfolio();
     this.getFavoriteStocks();
     await this.stocks.ensureLoaded();
-
-    this.query$
-      .pipe(
-        debounceTime(150),
-        distinctUntilChanged(),
-        tap(q => { this.searching = true; this.lastQuery = q;}),
-        map(q => this.stocks.filterLocal(q, 20)),
-        tap(() => this.searching = false)
-        )
-      .subscribe(list => this.suggestions = list);
-
-    this.suggestions = this.stocks.filterLocal('', 20);
   }
 
-  readonly form = this.fb.nonNullable.group(
-    {
-      date: new Date(),
-      symbol: '' as string,
-      side: 'BUY' as Side,
-      volume: 100,
-      price: 100,
-    }, { validators: [
-        (g) => (g.value.volume ?? 0) > 0 && (g.value.price ?? 0) > 0 ? null : { invalidNumbers: true }
-      ]}
-  );
-
-  readonly formValue = toSignal(this.form.valueChanges.pipe(startWith(this.form.getRawValue())), {
-    initialValue: this.form.getRawValue()
-  });
-
-  readonly amount = computed(() => {
-    const { volume, price } = this.formValue();
-    return (volume ?? 0) * (price ?? 0);
-  });
-
-  openDialog() {
-    this.showDialog.set(true);
-  }
-  closeDialog() {
-    this.showDialog.set(false);
+  loadTransaction() {
+    this.transactionService.loadTransaction(this.currentPage, 10).subscribe({
+      next:(resp) => this.transactions.set(resp),
+      error:(err) => console.error('Unable to load the transactions')
+    })
   }
 
-  async submit() {
-    if (this.form.invalid) return;
-    const v = this.form.getRawValue();
-    this.repo.add({
-      date: new Date(v.date).toISOString().slice(0, 16),
-      symbol: v.symbol.trim().toUpperCase(),
-      side: v.side,
-      volume: v.volume,
-      price: v.price
-    });
-    this.toastr.success("Transaction ajoutée !", "Succès:");
-    this.closeDialog();
-    this.portfolio.refresh();
+  loadPortfolio() {
+    this.portfolioService.loadPortfolio().subscribe({
+      next:(resp) => { 
+        this.portfolio.set(resp),
+        this.positions.set(resp.stocks);
+      },
+      error:(err) => console.error('Unable to load the portfolio')
+    })
   }
 
-  tagSeverity(side: Side) {
-    return side === 'BUY' ? 'success' : 'danger';
+  onPageChange(event: any): void {
+    this.currentPage = event.first / 10;
+    this.loadTransaction();
   }
 
   tagPerformance(pct?: number) {
     return pct ? (pct > 0 ? 'success' : 'danger') : 'neutral';
   }
 
-  formatYield(yieldPct?: number): string {
-    if (yieldPct === undefined || yieldPct === null) {
-      return '';
-    }
-    const percentage = yieldPct * 100;
-    return `${percentage.toFixed(2)}%`;
-  }
-
-  retry() {
-    this.repo.refresh()
-    this.portfolio.refresh()
-  };
-
-  onSearch(event: AutoCompleteCompleteEvent) {
-    this.query$.next(event.query ?? '');
-  }
-
-  onPick(event: AutoCompleteSelectEvent) {
-    const opt = event.value as StockOption;
-    this.form.patchValue({symbol: opt.symbol});
-    this.symbolInput = opt.symbol;
-  }
-
-  canAdd(): boolean {
-    const q = this.lastQuery?.trim();
-    if (!q) return false;
-    const qU = q.toUpperCase();
-    const exists = this.suggestions.some(s => s.symbol === qU);
-    return (!this.searching && !exists);
-  }
-
-  async createFromQuery() {
-    const q = (this.lastQuery ?? '').trim();
-    if (!q) return;
-
-    this.searching = true;
-
-    try {
-      const created = await this.stocks.create(q, q);
-      this.form.patchValue({symbol: created.symbol});
-      this.symbolInput = created.symbol;
-
-      this.suggestions = this.stocks.filterLocal('', 20);
-    } finally {
-      this.searching = false;
-    }
-  }
   liked = false;
 
   // GESTION DES STOCKS FAVORIS
@@ -260,30 +215,5 @@ export class PortfolioOverview implements OnInit {
       volume : data.volume,
       price : data.price
     })
-  }
-
-  submitTransactionForm() {
-    const formValues = this.transactionForm.getRawValue();
-    this.portfolio.updateTransaction(formValues.id, formValues.price, formValues.volume, formValues.date)
-    .subscribe(
-      next => {
-        this.portfolio.refresh();
-        this.repo.refresh();
-        this.showTransactionDialog.set(false);
-        this.toastr.success("Transaction modifiée !", "Succès:");
-      }
-    );
-  }
-
-  deleteTransaction(){
-    const formValues = this.transactionForm.getRawValue();
-    this.portfolio.deleteTransaction(formValues.id).subscribe(
-      next => {
-        this.portfolio.refresh();
-        this.repo.refresh();
-        this.showTransactionDialog.set(false);
-        this.toastr.success("Transaction supprimée !", "Succès:");
-      }
-    );
   }
 }

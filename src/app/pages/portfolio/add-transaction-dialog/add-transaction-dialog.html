@@ -1,0 +1,84 @@
+<p-dialog
+  [(visible)]="visible"
+  header="Add Transaction"
+  [focusOnShow]="false"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '520px' }">
+  <ng-template pTemplate="content">
+    <form [formGroup]="transactionGroup" (ngSubmit)="submit()" class="form" id="transactionForm">
+      <div class="row">
+        <label>Date</label>
+        <p-datePicker appendTo="body" formControlName="date" [showTime]="true" dateFormat="yy-mm-dd"></p-datePicker>
+      </div>
+      <div class="row">
+        <label>Instrument</label>
+        <p-autoComplete
+          formControlName="stock"
+          [suggestions]="filteredStock()"
+          (completeMethod)="onSearch($event)"
+          (onSelect)="onPick($event)"
+          (onDropdownClick)="onDropdownClick()"
+          [dropdown]="true"
+          inputId="instrument-ac"
+          [placeholder]="loading() ? 'Loading' : 'Type a symbol or name'"
+          class="w-full"
+          optionLabel="name"
+          [disabled]="loading()">
+          @if (loading()) {
+            <i class="pi pi-spinner pi-spin absolute right-2 top-1/2 -translate-y-1/2 opacity-70"></i>
+          }
+          <ng-template pTemplate="loader">
+            <div class="p-2 text-center">
+              <i class="pi pi-spin pi-spinner mr-2"></i> Loading stocks...
+            </div>
+          </ng-template>
+          <ng-template let-stock #item>
+            <div class="stock-item">
+              <div class="stock-info">
+                <span class="stock-symbol">{{ stock.symbol }}</span>
+                <span class="stock-name-type">{{ stock.name + ' - ' + stock.type }}</span>
+              </div>
+              <span class="stock-price">${{ stock.price }}</span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="footer">
+            @if (canAdd()) {
+              <button pButton type="button" class="w-full" (click)="createNewStock()">
+                <i class="pi pi-plus mr-2"></i>
+                <span>Add "{{ lastQuery() }}"</span>
+              </button>
+            }
+          </ng-template>
+        </p-autoComplete>
+      </div>
+      <div class="row">
+        <label>Side</label>
+        <p-select appendTo="body" formControlName="side" [options]="[{label:'BUY',value:'BUY'},{label:'SELL',value:'SELL'}]"></p-select>
+      </div>
+      <div class="row">
+        <label>Quantity</label>
+        <p-inputNumber formControlName="volume" [min]="0.01"></p-inputNumber>
+      </div>
+      <div class="row">
+        <label>Price</label>
+        <p-inputNumber formControlName="price" mode="currency" currency="USD" [min]="0.01"></p-inputNumber>
+      </div>
+      <div class="amount">Amount: <b> {{ amount() | currencyOrNone }}</b></div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton type="button" pButtonLabel="Cancel" class="p-button-text btn-ghost" (click)="close()">
+      Cancel
+    </button>
+    <button pButton 
+      type="submit" 
+      pButtonLabel="Save"
+      form="transactionForm"
+      pButtonIcon="pi pi-check" 
+      class="btn-primary" 
+      [disabled]="transactionGroup.invalid || saveLoading()">
+      {{ saveLoading() ? 'Loading' : 'Save' }}
+    </button>
+  </ng-template>
+</p-dialog>

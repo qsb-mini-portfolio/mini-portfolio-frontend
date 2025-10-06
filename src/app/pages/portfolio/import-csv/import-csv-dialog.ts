@@ -8,7 +8,7 @@ import {CommonModule} from '@angular/common';
 import {DialogModule} from 'primeng/dialog';
 import {ButtonModule} from 'primeng/button';
 import {ProgressBarModule} from 'primeng/progressbar';
-import { HttpTransactionsAdapter } from '../../../services/transaction/http-transactions.adapter';
+import { TransactionService } from '../../../services/transaction/transaction.service';
 
 @Component({
   selector: 'app-import-csv-dialog',
@@ -18,24 +18,18 @@ import { HttpTransactionsAdapter } from '../../../services/transaction/http-tran
   styleUrls: ['./import-csv-dialog.scss'],
 })
 export class ImportCsvDialog {
-  private _visible = signal(false);
-  get isVisible(): boolean { return this._visible(); }
-  set isVisible(v: boolean) { this._visible.set(v); }
 
-
-  open()  { this._visible.set(true); }
-  close() { this._visible.set(false); this.closed.emit(); }
-
+  private readonly transactionService = inject(TransactionService);
+  
   selectedFile = signal<File | null>(null);
+  visible = signal(false);
   loading = signal(false);
 
-  @Output() completed = new EventEmitter<{ detectedRows: number; savedRows: number }>();
-  @Output() closed = new EventEmitter<void>();
-  private readonly repo = inject(HttpTransactionsAdapter);
+  @Output() completed = new EventEmitter<void>();
 
-  constructor() { }
-
-  onClose() { this.closed.emit(); }
+  open()  { 
+    this.visible.set(true); 
+  }
 
   onSelect(e: FileSelectEvent) {
     const file = e.files?.[0];
@@ -51,9 +45,13 @@ export class ImportCsvDialog {
     if (!file) return;
 
     this.loading.set(true);
-    this.repo.importCsv(file).subscribe({
-      next: (res) => { /* success */ this.loading.set(false); this.close(); },
-      error: (err) => { /* toast */ this.loading.set(false); }
+    this.transactionService.importCsv(file).subscribe({
+      next: (res) => { 
+        this.loading.set(false); 
+        this.visible.set(false); 
+        this.completed.emit();
+      },
+      error: (err) => console.error('Unable to import the CSV')
     });
   }
 }

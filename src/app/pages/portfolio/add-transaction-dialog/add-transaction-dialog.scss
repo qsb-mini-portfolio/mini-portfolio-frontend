@@ -1,0 +1,57 @@
+form.form {
+  display: grid; gap: 1rem;
+  .row { display: grid; grid-template-columns: 140px 1fr; gap: .75rem; align-items: center; }
+  .amount { text-align: right; }
+  .actions { display: flex; justify-content: flex-end; gap: .5rem; }
+}
+
+.stock-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.25rem 0.5rem;
+  width: 280px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.stock-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.stock-symbol,
+.stock-name-type {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stock-symbol {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #333;
+}
+
+.stock-name-type {
+  font-size: 0.75rem;
+  color: #6b6b6b;
+}
+
+.stock-price {
+  font-weight: bold;
+  font-size: 0.875rem;
+  margin-left: 1rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.p-autocomplete input.p-inputtext {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+

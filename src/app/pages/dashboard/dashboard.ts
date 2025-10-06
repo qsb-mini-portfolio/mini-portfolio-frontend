@@ -10,12 +10,12 @@ import { ApexNonAxisChartSeries, ApexOptions, NgApexchartsModule } from 'ng-apex
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { Utils } from '../../utils/utils';
 
-import { CurrencyOrNonePipe } from '../../utils/currencyOrNonePipe';
-import { PercentageOrNonePipe } from '../../utils/percentageOrNonePipe';
-import { PercentageColorPipe } from '../../utils/percentageClassPipe';
+import { CurrencyOrNonePipe } from '../../utils/pipe/currencyOrNonePipe';
+import { PercentageOrNonePipe } from '../../utils/pipe/percentageOrNonePipe';
+import { PercentageColorPipe } from '../../utils/pipe/percentageClassPipe';
 
 import { DashboardResponse } from '../../models/dashboard/dashboardResponse';
-import { ApiPosition } from '../../models/portfolio/position.model';
+import { ApiPosition } from '../../models/portfolio/position_old.model';
 
 
 @Component({

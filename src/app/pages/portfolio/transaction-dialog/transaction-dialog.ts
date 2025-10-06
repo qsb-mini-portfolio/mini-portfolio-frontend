@@ -1,5 +1,5 @@
- import {Component, computed, inject, signal, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+ import {Component, computed, inject, signal, OnInit, ViewChild, Output, EventEmitter} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {CardModule} from 'primeng/card';
 import {TableModule} from 'primeng/table';
@@ -8,95 +8,116 @@ import {TagModule} from 'primeng/tag';
 import {DialogModule} from 'primeng/dialog';
 import {InputNumber, InputNumberModule} from 'primeng/inputnumber';
 import {DatePickerModule} from 'primeng/datepicker';
-import { UserService } from '../../../services/user/userService';
-import { PortfolioService } from '../../../services/portfolio/portfolio.service';
 import { StocksService, StockOption } from '../../../services/stock/stocks.service';
-import { HttpTransactionsAdapter } from '../../../services/transaction/http-transactions.adapter';
 import { ToastrService } from 'ngx-toastr';
+import { TransactionService } from '../../../services/transaction/transaction.service';
+import { Transaction } from '../../../models/transaction/transaction';
+import { SelectModule } from 'primeng/select';
+import { StockResponse } from '../../../models/stock/stockResponse';
+import { Side } from '../../../models/transaction/transaction.model';
+import { AbsPipe } from '../../../utils/pipe/absPipe';
 
 
 
 @Component({
   selector: 'app-transaction-dialog',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardModule, TableModule, ButtonModule, TagModule, DialogModule,
-    InputNumberModule, InputNumber, DatePickerModule, FormsModule],
+  imports: [
+    CommonModule,
+    DialogModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    DatePickerModule,
+    SelectModule,
+    InputNumber
+  ],
   templateUrl: './transaction-dialog.html',
   styleUrls: ['./transaction-dialog.scss' , '../portfolio-overview.scss']
 })
 export class TransactionDialog {
-  private readonly portfolio = inject(PortfolioService);
-  private readonly repo = inject(HttpTransactionsAdapter);
-  private readonly fb = inject(FormBuilder);
-  private toastr = inject(ToastrService);
+  private readonly transactionSerivce = inject(TransactionService);
 
-  readonly transactions = this.repo.transactions;
-  readonly transactionsMutable = computed(() => [...this.transactions()]);
+  private currentTransaction: Transaction | undefined = undefined;
 
-  private readonly stocks = inject(StocksService);
-
-  positions = this.portfolio.positions;
-  loading = this.portfolio.loading;
-  error = this.portfolio.error;
-
-  readonly showDialog = signal(false);
+  visible = signal<boolean>(false);
+  loading = signal<boolean>(false);
 
   symbolInput = '';
   suggestions: StockOption[] = [];
   lastQuery = '';
   searching = false;
 
+  @Output() deleteComplete = new EventEmitter<void>();
+  @Output() updateComplete = new EventEmitter<void>();
 
- readonly transactionForm = this.fb.nonNullable.group(
-    {
-      id : "",
-      date: new Date(),
-      volume: 100,
-      price: 100,
-    }, { validators: [
-        (g) => (g.value.volume ?? 0) > 0 && (g.value.price ?? 0) > 0 ? null : { invalidNumbers: true }
-      ]}
-  );
-  readonly showTransactionDialog = signal(false);
-  openTransactionDialog() {
-    this.showTransactionDialog.set(true);
-  }
-  closeTransactionDialog() {
-    this.showTransactionDialog.set(false);
-  }
+  transactionGroup = new FormGroup({
+      date: new FormControl<Date>(new Date()),
+      side:  new FormControl<Side>('BUY'),
+      volume: new FormControl<number>(100),
+      price: new FormControl<number>(100),
+    }, { 
+      validators: [this.positiveNumbersValidator()]
+    });
 
-  handleRowSelect(event : any){
-    this.showTransactionDialog.set(true)
-    const data = event.data;
-    this.transactionForm.patchValue({
-      id : data.id,
-      date : new Date(data.dateIso),
-      volume : data.volume,
-      price : data.price
+  private positiveNumbersValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const volume = control.get('volume')?.value ?? 0;
+      const price = control.get('price')?.value ?? 0;
+
+      if (volume > 0 && price > 0) {
+        return null;
+      }
+      return { invalidNumbers: true };
+    }
+  };
+
+  open(transaction: Transaction) {
+    this.visible.set(true);
+    this.currentTransaction = transaction;
+
+    this.transactionGroup.patchValue({
+      date : new Date(transaction.date),
+      volume : Math.abs(transaction.volume),
+      side: transaction.volume > 0 ? 'BUY' : 'SELL',
+      price : transaction.price,
     })
   }
 
-  submitTransactionForm() {
-    const formValues = this.transactionForm.getRawValue();
-    this.portfolio.updateTransaction(formValues.id, formValues.price, formValues.volume, formValues.date)
-    .subscribe(
+  close() {
+    this.visible.set(false);
+  }
+
+  deleteTransaction() {
+    this.loading.set(true);
+    this.transactionSerivce.deleteTransaction(this.currentTransaction!.transactionId).subscribe(
       next => {
-        this.portfolio.refresh();
-        this.repo.refresh();
-        this.showTransactionDialog.set(false);
-        this.toastr.success("Transaction modifiée !", "Succès:");
+        this.deleteComplete.emit();
+        this.visible.set(false);
+        this.loading.set(false);
       }
     );
   }
 
-  deleteTransaction(){
-    const formValues = this.transactionForm.getRawValue();
-    this.portfolio.deleteTransaction(formValues.id).subscribe(
+  submit() {
+    if (this.transactionGroup.invalid) return;
+
+    this.loading.set(true);
+
+    let volume = this.transactionGroup.get('volume')!.value!;
+    if (this.transactionGroup.get('side')!.value === 'SELL') {
+      volume = -volume;
+    }
+
+    this.transactionSerivce.updateTransaction(
+      this.currentTransaction!.transactionId,
+      this.transactionGroup.get('price')!.value!,
+      volume,
+      this.transactionGroup.get('date')!.value!
+    ).subscribe(
       next => {
-        this.portfolio.refresh();
-        this.repo.refresh();
-        this.showTransactionDialog.set(false);
-        this.toastr.success("Transaction supprimée !", "Succès:");
+        this.updateComplete.emit();
+        this.visible.set(false);
+        this.loading.set(false);
       }
     );
   }
