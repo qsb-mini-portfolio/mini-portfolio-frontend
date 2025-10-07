@@ -1,4 +1,9 @@
-export const env = {
-  production: false,
-  apiUrl: 'https://mini-portfolio-app-offeh.ondigitalocean.app'
+export interface Env {
+  production: boolean;
+  apiUrl: string;
+}
+
+export const env: Env = {
+  production: true,
+  apiUrl: (window as any)?.env?.API_URL ?? 'http://localhost:8080'
 };
