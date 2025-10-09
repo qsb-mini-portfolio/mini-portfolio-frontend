@@ -12,6 +12,7 @@ import { UserResponse } from '../../models/user/UserResponse';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import {DialogModule} from 'primeng/dialog';
+import { AvatarService } from '../../services/global/avatar.service';
 
 @Component({
   selector: 'app-user-page',
@@ -31,6 +32,7 @@ import {DialogModule} from 'primeng/dialog';
 export class UserPage {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
+  avatarService = inject(AvatarService)
   private cdr = inject(ChangeDetectorRef);
   private authService = inject(AuthService);
   private toastr = inject(ToastrService);
@@ -43,21 +45,15 @@ export class UserPage {
   email: string = '';
 
 ngOnInit(): void {
+  this.avatarNames = this.avatarService.getAvatars();
   this.userService.getMyData().subscribe({
     next: (response) => {
       this.user = response;
-
-      if (this.user.profilePicture) {
-        this.profileUrl = `assets/images/${this.user.profilePicture}.jpg`;
-      } else {
-        this.profileUrl = this.temp;
-      }
-
+      this.profileUrl = `assets/images/${this.user.profilePicture}.jpg`;
       this.cdr.markForCheck();
     },
     error: () => {
       this.error = "Impossible de récupérer les données utilisateurs";
-      this.profileUrl = this.temp; 
     }
   });
 }
@@ -93,32 +89,22 @@ ngOnInit(): void {
       this.authService.logout();
     }
 
-  // USER PICTURER : 
+  // USER PROFILE : 
   hover = false;
-  temp = './assets/images/default-avatar.jpg';
-  profileUrl: String = this.temp;
+  profileUrl: String = "" ;
   showModal = false;
   toggleModal() {
     this.showModal = !this.showModal;
   }
 
-  avatars: string[] = [
-    './assets/images/default-avatar.jpg',
-    './assets/images/cat.jpg',
-    './assets/images/dog.jpf',
-    './assets/images/smily.jpg',
-    './assets/images/vanGogh.jpg',
-    './assets/images/Joconde.jpg'
-
-  ];
-  avatarNames: string[] = ['default-avatar', 'cat', 'dog', 'smily', 'vanGogh', 'Joconde'];
-
+  avatarNames: string[] = [];
   selectAvatar(avatarName: string) {
-    this.profileUrl = `assets/images/${avatarName}.jpg`; 
     this.toggleModal();
-
     this.userService.changeProfilePicture(avatarName).subscribe({
-      next: () => this.toastr.success("Avatar changé avec succès !", "Succès:"),
+      next: () => {
+        this.toastr.success("Avatar changé avec succès !", "Succès:"),
+        this.avatarService.setAvatar(avatarName);
+      },
       error: () => this.toastr.error("Une erreur est survenue", "Erreur:")
     });
   }

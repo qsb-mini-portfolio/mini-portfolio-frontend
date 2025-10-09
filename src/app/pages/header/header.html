@@ -10,7 +10,13 @@
     @if (isAuth()) {
       <button pButton class="p-button-text" [routerLink]="'/dashboard'" label="Dashboard"></button>
       <button pButton class="p-button-text" [routerLink]="'/portfolio'" label="Portfolio"></button>
-      <button pButton class="p-button-text" [routerLink]="'/userPage'" [label]="userNameLabel ?? 'Profile'"></button>
+      <div class="avatar" 
+          (mouseenter)="hover = true" 
+          (mouseleave)="hover = false" 
+          (click)="redirect()">
+        <img [src]="avatarService.profileUrl()" alt="Avatar" class="avatar-img" />
+        <div class="overlay" *ngIf="hover"></div>
+      </div>
 
       <button pButton class="p-button-rounded p-button-text" icon="pi pi-sign-out" (click)="logout()" aria-label="Logout"></button>
     } @else {

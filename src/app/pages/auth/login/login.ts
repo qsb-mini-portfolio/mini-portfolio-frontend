@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
-
 import { UserService } from '../../../services/user/userService';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Utils } from '../../../utils/utils';
+import { UserResponse } from '../../../models/user/UserResponse';
+import { AvatarService } from '../../../services/global/avatar.service';
 
 @Component({
   standalone: true,
@@ -32,7 +32,7 @@ export class Login {
   private router = inject(Router);
   private auth = inject(AuthService);
   private userService = inject(UserService);
-
+  avatarService = inject(AvatarService);
   loading = signal(false);
   error = signal<string | null>(null);
 
@@ -52,8 +52,9 @@ export class Login {
       next: () => {
         
         this.userService.getMyData().subscribe({
-          next : (user) => {
+          next : (user : UserResponse) => {
             localStorage.setItem('username',user.username);
+            this.avatarService.setAvatar(user.profilePicture);
             this.router.navigateByUrl('/dashboard')
           },
        error: (e) => {

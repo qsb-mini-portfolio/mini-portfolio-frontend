@@ -3,11 +3,10 @@
   <div class="card">
     <div class="profile">
       <div class="avatar" 
-           (mouseenter)="hover = true" 
-           (mouseleave)="hover = false" 
-           (click)="toggleModal()">
-        <img *ngIf="profileUrl; else defaultIcon" 
-             [src]="profileUrl" alt="Avatar" class="avatar-img" />
+        (mouseenter)="hover = true" 
+        (mouseleave)="hover = false" 
+        (click)="toggleModal()">
+        <img [src]="avatarService.profileUrl()" alt="Avatar" class="avatar-img" />
         <ng-template #defaultIcon>
           <i class="fas fa-user"></i>
         </ng-template>
