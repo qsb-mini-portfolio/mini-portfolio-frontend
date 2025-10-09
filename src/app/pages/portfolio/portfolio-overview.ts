@@ -28,8 +28,6 @@ import { Position } from '../../models/portfolio/position.model';
 import { CurrencyOrNonePipe } from "../../utils/pipe/currencyOrNonePipe";
 import { PercentageOrNonePipe } from "../../utils/pipe/percentageOrNonePipe";
 
-
-
 @Component({
   selector: 'app-portfolio-overview',
   standalone: true,

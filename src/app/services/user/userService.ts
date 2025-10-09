@@ -43,4 +43,11 @@ export class UserService {
               {body : {stockSymbol : symbol}}
         )
     }
+
+    changeProfilePicture(newProfilePicture : string): Observable<UserResponse>{
+        return this.http.put<UserResponse>(
+            `${this.apiBase}${API_ROUTES.user.changeProfilePicture}`,
+            { profilePicture : newProfilePicture}
+        );
+    }
 }

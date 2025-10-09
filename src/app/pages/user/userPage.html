@@ -2,9 +2,18 @@
   <h2>Personal Information</h2>
   <div class="card">
     <div class="profile">
-      <div class="avatar">
-        <i class="fas fa-user"></i>
+      <div class="avatar" 
+           (mouseenter)="hover = true" 
+           (mouseleave)="hover = false" 
+           (click)="toggleModal()">
+        <img *ngIf="profileUrl; else defaultIcon" 
+             [src]="profileUrl" alt="Avatar" class="avatar-img" />
+        <ng-template #defaultIcon>
+          <i class="fas fa-user"></i>
+        </ng-template>
+        <div class="overlay" *ngIf="hover"></div>
       </div>
+
       <div>
         <h3>{{ user?.username }}</h3>
       </div>
@@ -13,9 +22,8 @@
     <form [formGroup]="form" (ngSubmit)="saveChanges()">
       <div class="form-row">
         <label for="email">Email :</label>
-        <input id="emailValue" type="text" formControlName="email" value= {{user?.email}}>
+        <input id="emailValue" type="text" formControlName="email" [value]="user?.email" />
       </div>
-
       <hr />
       <div class="actions">
         <button type="submit" class="btn save">Change email</button>
@@ -24,3 +32,32 @@
     </form>
   </div>
 </div>
+
+<p-dialog
+  [(visible)]="showModal"
+  header="Choose an avatar"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [style]="{ width: '30rem' }"
+  [contentStyle]="{ 'text-align': 'center', 'padding': '2rem' }"
+>
+  <ng-template pTemplate="content">
+    <div class="avatars-grid">
+      <div 
+        class="avatar-card"
+        *ngFor="let avatarName of avatarNames"
+        (click)="selectAvatar(avatarName)"
+      >
+        <img 
+          [src]="'assets/images/' + avatarName + '.jpg'" 
+          [alt]="avatarName" 
+          class="avatar-img" 
+        />
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+  </ng-template>
+</p-dialog>

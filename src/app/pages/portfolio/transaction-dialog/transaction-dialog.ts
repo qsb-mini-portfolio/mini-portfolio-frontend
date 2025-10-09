@@ -1,17 +1,16 @@
-import {Component, inject, signal, Output, EventEmitter} from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn} from '@angular/forms';
-import { CommonModule } from '@angular/common';
-
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { InputNumber } from 'primeng/inputnumber';
+ import {Component, inject, signal, Output, EventEmitter} from '@angular/core';
+import {AbstractControl,  FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {ButtonModule} from 'primeng/button';
+import {DialogModule} from 'primeng/dialog';
+import {InputNumber} from 'primeng/inputnumber';
 import {DatePickerModule} from 'primeng/datepicker';
-import { SelectModule } from 'primeng/select';
-
-import { StockOption } from '../../../services/stock/stocks.service';
 import { TransactionService } from '../../../services/transaction/transaction.service';
 import { Transaction } from '../../../models/transaction/transaction';
+import { SelectModule } from 'primeng/select';
 import { Side } from '../../../models/transaction/transaction.model';
+
+
 
 @Component({
   selector: 'app-transaction-dialog',
@@ -37,7 +36,6 @@ export class TransactionDialog {
   loading = signal<boolean>(false);
 
   symbolInput = '';
-  suggestions: StockOption[] = [];
   lastQuery = '';
   searching = false;
 

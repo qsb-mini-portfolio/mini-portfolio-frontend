@@ -15,7 +15,8 @@ export const API_ROUTES = {
   user : {
     getMe : '/user',
     changeEmail :'/user/email',
-    favoriteStock : '/user/favoriteStock'
+    favoriteStock : '/user/favoriteStock',
+    changeProfilePicture : '/user/profilePicture'
   },
   stock: {
     root: '/stock',
