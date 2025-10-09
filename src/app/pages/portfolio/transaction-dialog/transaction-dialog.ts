@@ -22,7 +22,7 @@ import { Side } from '../../../models/transaction/transaction.model';
     ButtonModule,
     DatePickerModule,
     SelectModule,
-    InputNumber
+    InputNumber 
   ],
   templateUrl: './transaction-dialog.html',
   styleUrls: ['./transaction-dialog.scss' , '../portfolio-overview.scss']
