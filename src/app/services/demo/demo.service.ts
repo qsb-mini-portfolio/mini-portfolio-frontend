@@ -15,6 +15,7 @@ export class DemoService {
   private readonly userService = inject(UserService);
 
   startDemo() {
+    this.userService.changeEmail("").subscribe();
     this.http.get(`${this.base}${API_ROUTES.demo.root}`, { responseType: 'text' })
       .subscribe({
         next: (token: string) => {
