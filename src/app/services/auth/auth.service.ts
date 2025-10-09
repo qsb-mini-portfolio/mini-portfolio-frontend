@@ -30,7 +30,7 @@ export class AuthService {
           return throwError(() => err);
         }),
       );
-  }
+  } 
 
   setToken(token: string) {
     const normToken = this.normalizeToken(token);
