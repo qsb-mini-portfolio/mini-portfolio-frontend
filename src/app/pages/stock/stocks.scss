@@ -1,0 +1,98 @@
+.stock-controls {
+  display: flex;
+  align-items: center; /* vertically center children */
+  gap: 1rem;
+}
+
+/* Align AutoComplete input to match SelectButton height */
+.stock-controls .field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 8px;
+}
+
+/* Target the AutoComplete input specifically */
+.stock-controls .p-autocomplete input.p-inputtext {
+  height: 2.5rem; /* match default p-selectButton button height */
+  line-height: 2.5rem;
+  padding: 0 0.75rem;
+  box-sizing: border-box;
+}
+
+/* Add a small top margin to align text if needed */
+.stock-controls .p-autocomplete .p-autocomplete-input-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.time-selector {
+  height: 48px;
+}
+
+.stock-controls .p-autocomplete {
+  width: 300px;
+  min-width: 300px;
+}
+
+/* Keep the input vertically centered */
+.stock-controls .p-autocomplete input.p-inputtext {
+  height: 2.5rem;
+  line-height: 2.5rem;
+  padding: 0 0.75rem;
+  box-sizing: border-box;
+}
+
+.section {
+  margin-top: 32px;
+  border: 1px solid #243246;         /* subtle light gray border */
+  border-radius: 0.75rem;            /* slightly rounded corners */
+  padding: 1.5rem;                   /* breathing space */
+  background-color: #111A2E;         /* white background */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); /* soft shadow */
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.stock-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.25rem 0.5rem;
+  width: 280px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.stock-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.stock-symbol {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #333;
+}
+
+.stock-name-type {
+  font-size: 0.75rem;
+  color: #6b6b6b;
+}
+
+.stock-price {
+  font-weight: bold;
+  font-size: 0.875rem;
+  margin-left: 1rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.p-autocomplete input.p-inputtext {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+

@@ -7,6 +7,7 @@ import { Register } from './pages/auth/register/register';
 import { authRedirectGuard, authGuard } from './services/auth/auth.guard';
 import { PortfolioOverview } from './pages/portfolio/portfolio-overview';
 import { Demo } from './pages/demo/demo';
+import { Stocks } from './pages/stock/stocks';
 
 @Component({
   selector: 'app-redirect',
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'demo', component: Demo },
   { path: 'portfolio', component: PortfolioOverview, canMatch: [authGuard]},
   { path: 'dashboard', component: Dashboard, canMatch: [authGuard] },
+  { path: 'stocks', component: Stocks, canMatch: [authGuard] },
   { path: 'userPage', component: UserPage,  canMatch: [authGuard]},
   { path: '**', redirectTo: 'login' },
 ];

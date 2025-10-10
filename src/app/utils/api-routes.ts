@@ -20,6 +20,7 @@ export const API_ROUTES = {
   },
   stock: {
     root: '/stock',
+    graph: '/stock/graph',
     stockBySymbol: (symbol: string) => `/stock/${encodeURIComponent(symbol)}`,
   },
   demo: {
