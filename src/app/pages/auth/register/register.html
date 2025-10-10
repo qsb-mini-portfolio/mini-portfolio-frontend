@@ -29,7 +29,9 @@
           inputStyleClass="w-full"
           styleClass="w-full mb-3"
         ></p-password>
-
+        @if (checkPassword()){
+          <p-message severity="error" class="w-full mb-3">{{ checkPassword() || '' }}</p-message>
+          }
         @if (error()) {
           <p-message severity="error" class="w-full mb-3">{{ error() || '' }}</p-message>
         }

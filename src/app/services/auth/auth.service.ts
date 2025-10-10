@@ -42,7 +42,7 @@ export class AuthService {
     return this.http
       .post(`${this.apiBase}${API_ROUTES.auth.register}`, request, {
         observe: 'response',
-        responseType: 'text',
+        responseType: 'json',
       })
       .pipe(
         map((res) => {
