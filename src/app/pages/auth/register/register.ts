@@ -52,7 +52,7 @@ submit() {
     grecaptcha.execute('6LeiSuUrAAAAAEEwMwM4XEVMyPZAQcVfZp6KZZca', { action: 'register' }).then((token: string) => {
       const { username, password } = this.form.getRawValue();
 
-      this.authService.registerTemp({
+      this.authService.register({
         username: username!,
         password: password!,
         recaptcha: token
