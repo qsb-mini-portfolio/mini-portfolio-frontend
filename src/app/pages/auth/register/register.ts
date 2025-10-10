@@ -1,7 +1,7 @@
+
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
@@ -10,12 +10,20 @@ import { MessageModule } from 'primeng/message';
 import { RippleModule } from 'primeng/ripple';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth/auth.service';
-import { Utils } from '../../../utils/utils';
 
+declare var grecaptcha: any;
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, CardModule, InputTextModule, PasswordModule, ButtonModule, MessageModule, RippleModule],
+  imports: [
+    ReactiveFormsModule,
+    CardModule,
+    InputTextModule,
+    PasswordModule,
+    ButtonModule,
+    MessageModule,
+    RippleModule
+  ],
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,34 +43,32 @@ export class Register {
     password: ['', Validators.required]
   });
 
-  submit() {
-    if (this.form.invalid || this.loading()) return;
-    this.error.set(null);
-    this.loading.set(true);
+submit() {
+  if (this.form.invalid || this.loading()) return;
 
-    const { username, password } = this.form.getRawValue();
-    this.authService
-      .register({ username: username!, password: password! })
-      .subscribe({
-        next: (res) => {
+  this.loading.set(true);
+
+  grecaptcha.ready(() => {
+    grecaptcha.execute('6LeiSuUrAAAAAEEwMwM4XEVMyPZAQcVfZp6KZZca', { action: 'register' }).then((token: string) => {
+      const { username, password } = this.form.getRawValue();
+
+      this.authService.registerTemp({
+        username: username!,
+        password: password!,
+        recaptcha: token
+      }).subscribe({
+        next: () => {
           this.loading.set(false);
-          if (res?.ok) {
-            this.router.navigateByUrl('/login');
-          } else {
-            this.error.set('Registration failed');
-          }
+          this.router.navigateByUrl('/login');
         },
-      error: (e) => {
-        this.loading.set(false);
-        if (e.status === 400 && e.error?.errors) {
-          const errors = e.error.errors;
-        if (errors.password) {
-          this.checkPassword.set(errors.password);
+        error: (err) => {
+          this.loading.set(false);
+          this.toastr.error('Erreur d’inscription');
+          console.error(err);
         }
-        } else {
-          this.error.set('Registration failed');
-        }
-      }
+      });
     });
-  }
+  });
+}
+
 }
