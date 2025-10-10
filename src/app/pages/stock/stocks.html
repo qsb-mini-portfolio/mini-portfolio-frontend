@@ -1,0 +1,111 @@
+<div class="page">
+  <div class="content">
+    <h1 class="title">Stocks &amp; Prices</h1>
+    <div class="stock-controls flex items-center gap-4">
+      <div class="field flex items-center">
+        <label>Instrument</label>
+        <p-autoComplete
+          [suggestions]="filteredStock()"
+          (completeMethod)="onSearch($event)"
+          (onSelect)="onPick($event)"
+          (onDropdownClick)="onDropdownClick()"
+          [dropdown]="true"
+          inputId="instrument-ac"
+          [placeholder]="loading() ? 'Loading' : 'Type a symbol or name'"
+          class="w-full"
+          optionLabel="name"
+          [disabled]="loading()">
+          @if (loading()) {
+            <i class="pi pi-spinner pi-spin absolute right-2 top-1/2 -translate-y-1/2 opacity-70"></i>
+          }
+          <ng-template pTemplate="loader">
+            <div class="p-2 text-center">
+              <i class="pi pi-spin pi-spinner mr-2"></i> Loading stocks...
+            </div>
+          </ng-template>
+          <ng-template let-stock #item>
+            <div class="stock-item">
+              <div class="stock-info">
+                <span class="stock-symbol">{{ stock.symbol }}</span>
+                <span class="stock-name-type">{{ stock.name + ' - ' + stock.type }}</span>
+              </div>
+              <span class="stock-price">${{ stock.price }}</span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="footer">
+            @if (canAdd()) {
+              <button pButton type="button" class="w-full" (click)="createNewStock()">
+                <i class="pi pi-plus mr-2"></i>
+                <span>Add "{{ lastQuery() }}"</span>
+              </button>
+            }
+          </ng-template>
+        </p-autoComplete>
+      </div>
+
+      <div class="time-selector flex items-center">
+        <p-selectButton
+          [options]="periodOptions"
+          [(ngModel)]="selectedPeriod"
+          (onChange)="selectPeriod($event.value)"
+          optionLabel="label"
+          optionValue="value"
+          [style]="{ minWidth: 'auto' }">
+        </p-selectButton>
+      </div>
+    </div>
+    <section class="section">
+      <apx-chart
+        [chart]="{
+          type: 'line',
+          height: 350,
+          toolbar: { show: false },
+          zoom: { enabled: false },
+          background: 'transparent'
+        }"
+        [stroke]="{
+          curve: 'smooth',
+          width: 2
+        }"
+        [colors]="['#2563eb']"
+        [series]="[
+          {
+            name: 'Price',
+            data: charData()
+          }
+        ]"
+        [xaxis]="{
+          type: 'datetime',
+          labels: {
+            show: true,
+            style: {
+              colors: '#ffffff',
+              fontSize: '14px',
+              fontWeight: '600'
+            }
+          },
+          axisBorder: { show: false },
+          axisTicks: { show: false }
+        }"
+        [yaxis]="{
+          opposite: true,
+          labels: {
+            style: {
+              colors: '#ffffff',
+              fontSize: '14px',
+              fontWeight: '600'
+            },
+            formatter: yAxisLabelFormatter
+          },
+          axisBorder: { show: false }
+        }"
+        [grid]="{
+          show: true,
+          borderColor: '#243246',
+          row: { colors: ['transparent'], opacity: 0.5 },
+          column: { colors: ['transparent'], opacity: 0.5 }
+        }">
+      </apx-chart>
+    </section>
+  </div>
+</div>

@@ -68,8 +68,6 @@ export class PortfolioOverview implements OnInit {
   transactionLoading = signal<boolean>(false);
   portfolioLoading = signal<boolean>(false);
 
-  private readonly stocks = inject(StocksService);
-
   private currentPage = 0;
 
   @ViewChild('importCsvDialog') importCsvDialog!: ImportCsvDialog;
@@ -117,7 +115,6 @@ export class PortfolioOverview implements OnInit {
     this.loadTransaction();
     this.loadPortfolio();
     this.getFavoriteStocks();
-    await this.stocks.ensureLoaded();
   }
 
   loadTransaction() {
