@@ -121,20 +121,22 @@ export class Stocks {
     this.stocksService.getStockPriceGraph(this.selectStocks.symbol, this.selectedPeriod(), this.intervalMap[this.selectedPeriod()])
     .subscribe({
       next: (resp) => {
-        const timestampedData = this.generateTimestampedData(resp.prices, this.intervalMap[this.selectedPeriod()]);
+        const timestampedData = this.generateTimestampedData(resp.prices, this.selectedPeriod());
         this.charData.set(timestampedData);
       },
       error: (err) => console.error("Unable to retrieve stock price graph")
     })
   }
 
-  private generateTimestampedData(prices: number[], interval: string): [number, number][] {
+  private generateTimestampedData(prices: number[], period: string): [number, number][] {
     const now = Date.now();
-    const msPerInterval = Utils.intervalToMs(interval);
-    
+    const periodMs = Utils.intervalToMs(period);
+    const start = now - periodMs;
+    const intervalMs = periodMs / (prices.length - 1);
+
     return prices.map((price, idx) => {
-      const timestamp = now - (prices.length - 1 - idx) * msPerInterval;
-      return [timestamp, price];  // <-- use number (ms) here
+        const timestamp = start + idx * intervalMs;
+        return [timestamp, price];
     });
   }
 

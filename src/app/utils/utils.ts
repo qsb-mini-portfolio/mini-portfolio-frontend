@@ -21,9 +21,13 @@ export class Utils {
 
   static intervalToMs(interval: string): number {
     const value = parseInt(interval, 10);
-    if (interval.endsWith('m')) return value * 60 * 1000;
+
+    if (interval.endsWith('m') && !interval.endsWith('mo')) return value * 60 * 1000;
     if (interval.endsWith('h')) return value * 60 * 60 * 1000;
     if (interval.endsWith('d')) return value * 24 * 60 * 60 * 1000;
+    if (interval.endsWith('mo')) return value * 30 * 24 * 60 * 60 * 1000;
+    if (interval.endsWith('y')) return value * 365 * 24 * 60 * 60 * 1000;
+
     throw new Error('Invalid interval: ' + interval);
   }
 

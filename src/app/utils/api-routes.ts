@@ -11,6 +11,7 @@ export const API_ROUTES = {
   portfolio: {
     root: '/portfolio',
     dashboard: '/portfolio/dashboard',
+    graph: '/portfolio/graph',
   },
   user : {
     getMe : '/user',
