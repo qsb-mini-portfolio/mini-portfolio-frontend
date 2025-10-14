@@ -9,6 +9,7 @@ import { API_ROUTES } from '../../utils/api-routes';
 interface RegisterRequest {
   username: string;
   password: string;
+  recaptcha : string;
 }
 
 @Injectable({ providedIn: 'root' })
