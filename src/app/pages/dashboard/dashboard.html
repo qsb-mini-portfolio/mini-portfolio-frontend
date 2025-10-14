@@ -19,7 +19,7 @@
 
         <p-card class="kpi">
           <div class="kpi-title">Performance (%)</div>
-          <div class="kpi-value" [ngClass]="dashboardValues()?.yield | percentageColor">
+          <div class="kpi-value" [ngClass]="dashboardValues()?.yield | percentageColor:true">
             @if (loading()) {
               <i class="pi pi-spin pi-spinner"></i> Loading...
             }
