@@ -63,7 +63,7 @@ submit() {
         },
         error: (err) => {
           this.loading.set(false);
-          this.toastr.error('Erreur d’inscription');
+          this.toastr.error('Register error');
           console.error(err);
         }
       });

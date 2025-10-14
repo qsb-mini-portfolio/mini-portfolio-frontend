@@ -74,14 +74,14 @@ ngOnInit(): void {
     if (newEmail && emailRegex.test(newEmail)) {
       this.userService.changeEmail(newEmail).subscribe({
         next: (res) => {
-          this.toastr.success("Email changé avec succès !", "Succès:");
+          this.toastr.success("Email change with success !", "Success:");
         },
         error: () => {
-          this.toastr.error("Une erreur est survenue", "Erreur:");
+          this.toastr.error("An error has occured", "Error:");
         }
       });
     } else {
-      this.toastr.warning("Veuillez entrer une adresse email valide", "Attention:");
+      this.toastr.warning("Please enter a valid email", "Warning:");
     }
   }
 
@@ -102,10 +102,10 @@ ngOnInit(): void {
     this.toggleModal();
     this.userService.changeProfilePicture(avatarName).subscribe({
       next: () => {
-        this.toastr.success("Avatar changé avec succès !", "Succès:"),
+        this.toastr.success("Avatar changed with success !", "Success:"),
         this.avatarService.setAvatar(avatarName);
       },
-      error: () => this.toastr.error("Une erreur est survenue", "Erreur:")
+      error: () => this.toastr.error("An error has occured", "Error:")
     });
   }
 }

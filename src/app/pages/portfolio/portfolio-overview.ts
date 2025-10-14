@@ -92,22 +92,22 @@ export class PortfolioOverview implements OnInit {
   }
 
   onCSVImported() {
-    this.toastr.success("CSV Importé !", "Succès:");
+    this.toastr.success("CSV Imported !", "Success:");
     this.refresh();
   }
 
   onTransactionCreated() {
-    this.toastr.success("Transaction créée !", "Succès:");
+    this.toastr.success("Transaction created !", "Success:");
     this.refresh();
   }
 
   onDeleteTransaction() {
-    this.toastr.success("Transaction supprimée !", "Succès:");
+    this.toastr.success("Transaction deleted !", "Success:");
     this.refresh();
   }
 
   onUpdateTransaction() {
-    this.toastr.success("Transaction modifiée !", "Succès:");
+    this.toastr.success("Transaction updated !", "Success:");
     this.refresh();
   }
 
